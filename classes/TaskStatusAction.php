@@ -1,4 +1,4 @@
-<? php
+<?php
 /**
  * Класс описывает все состояния задания
  * и все возможные действия с ним
@@ -19,9 +19,13 @@
  * @property int $taskId
  * @property string $userRole
  * @property string $actualStatus
- * @method getStatuses()
- * @method getActions()
- * @method getActualStatus($actions)
+ * @property array $statuses
+ * @property array $actions
+ * @property string $status
+ * @property string $action
+ * @method getStatus()
+ * @method getAction()
+ * @method getActualStatus(string $action)
  * @method getAllowedAction(string $userRole)
  */
 
@@ -31,82 +35,81 @@ class TaskStatusAction
     public const DOER = 'doer';
 
     public int $userId = 0;
-    public int = $taskId = 0;
+    public int $taskId = 0;
     public string $userRole = self::CLIENT; //можно ли задать тип string, т.к. ожидаем значение константы string? или его не надо заранее прописывать?
-
+    public string $actualStatus = 'new';
+    public string $status;
+    public string $action;
 
     const STATUS_NEW = 'new';
     const STATUS_UNDO = 'undo';
-    const STATUS_INWORK = 'inwork';
+    const STATUS_WORKING = 'working';
     const STATUS_REFUSAL = 'failed';
     const STATUS_FINISH = 'finished';
 
-    const ACTION_CREATE = 'create'; 		//client
-    const ACTION_CANCEL = 'cancel'; 		//client
-    const ACTION_RESPOND = 'respond'; 		//doer
-    const ACTION_DO ='do';					//doer
-    const ACTION_REFUSE = 'refuse';		//doer
-    const ACTION_FINISH = 'finish';		//client
+    const ACTION_CREATE = 'create';
+    const ACTION_CANCEL = 'cancel';
+    const ACTION_RESPOND = 'respond';
+    const ACTION_REFUSE = 'refuse';
+    const ACTION_FINISH = 'finish';
 
-
-    private static $statuses = [
+    private static array $statuses = [
                  self::STATUS_NEW => 'new',
                  self::STATUS_UNDO => 'undo',
-                 self::STATUS_INWORK => 'inwork',
+                 self::STATUS_WORKING => 'working',
                  self::STATUS_REFUSAL => 'failed',
-                 self::STATUS_FINISH => 'finished'
+                 self::STATUS_FINISH => 'finished',
                 ];
 
-    private static $actions = [
-                self::ACTION_CREATE = 'create',
-                self::ACTION_CANCEL = 'cancel',
-                self::ACTION_RESPOND  = 'respond',
-                self::ACTION_REFUSE = 'refuse',
-                self::ACTION_FINISH = 'finish'
+    private static array $actions = [
+                self::ACTION_CREATE => 'create',
+                self::ACTION_CANCEL =>'cancel',
+                self::ACTION_RESPOND => 'respond',
+                self::ACTION_REFUSE => 'refuse',
+                self::ACTION_FINISH => 'finish',
                 ];
 
-    public $actualStatus = 'new';
-
-    public function __construct(int $clientId, int $doerId, array $actualStatus)
+    public function __construct(int $userId, int $taskId, string $userRole, string $actualStatus)
     {
-        $this->clientId = $clientId;
-        $this->doerId = $doerId;
+        $this->userId = $userId;
+        $this->taskId = $taskId;
+        $this->userRole = $userRole;
         $this->actualStatus = $actualStatus;
     }
 
+    /**
+     * @param array $statuses
+     * @param
+     * @return string $status
+     */
+    public function getStatus($key)
+    {
+        return $status = self::$statuses[$key];
+    }
 
     /**
-     * метод получает массив статусов задания
-     * @return array $statuses
+     * @param array $actions
+     * @return string $actions
      */
-    public function getStatuses()
-        {
-            return self::$statuses;
-        }
-
-    /**
-     * метод получает массив действий с заданием
-     * @return array $actions
-     */
-    public function getActions()
-        {
-            return self::$actions;
-        }
+    public function getAction($key)
+    {
+        return $action = self::$actions[$key];
+    }
 
     /**
      * метод получает актуальный статус задания
-     * @param array $actions
-     * @return const
+     * @param string $action
+     * @return string $actualStatus
      */
-    public function getActualStatus($actions)
+    public function getActualStatus(string $action)
     {
-     	switch (array $actions) {
+     	switch ($action) {
     		case self::ACTION_CREATE:
         		return $actualStatus = self::STATUS_NEW;
         	case self::ACTION_CANCEL:
         		return $actualStatus = self::STATUS_UNDO;
         	case self::ACTION_RESPOND:
-        		return $actualStatus = self::STATUS_INWORK;
+        		return $actualStatus = self::STATUS_WORKING;
         	case self::ACTION_REFUSE:
         		return $actualStatus = self::STATUS_REFUSAL;
         	case self::ACTION_FINISH:
@@ -116,31 +119,27 @@ class TaskStatusAction
 
     /**
      * метод определяет карту допустимых действий для заказчика и исполнителя
-     * @param array $statuses
+     * @param string $status
      * @param string @userRole
-     * @return $actions;
+     * @return $action;
      */
-     public function getAllowedAction(string $userRole)
+     public function getAllowedAction(string $status, string $userRole)
      {
-        if ($statuses = self::STATUS_NEW) {
-            switch ($userRole) {
-                case (self::CLIENT):
-                    return self::ACTION_CANСEL;
-                case (self::DOER):
-                    return self::ACTION_RESPOND;
-            }
-        }
-        if ($statuses = self::STATUS_INWORK) {
-            switch ($userRole) {
-                case (self::CLIENT):
-                    return self::ACTION_FINISH;
-                case (self::DOER):
-                    return self::ACTION_REFUSE;
-            }
-
-        }
-
+         if ($status = self::STATUS_NEW) {
+             switch ($userRole) {
+                 case (self::CLIENT):
+                     return $action = self::ACTION_CANCEL;
+                 case (self::DOER):
+                     return $action = self::ACTION_RESPOND;
+             }
+         }
+         if ($status = self::STATUS_WORKING) {
+             switch ($userRole) {
+                 case (self::CLIENT):
+                     return $action = self::ACTION_FINISH;
+                 case (self::DOER):
+                     return $action= self::ACTION_REFUSE;
+             }
+         }
+     }
 }
-
-
-
