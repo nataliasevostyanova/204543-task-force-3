@@ -26,7 +26,8 @@
  * @method getStatus()
  * @method getAction()
  * @method getActualStatus(string $action)
- * @method getAllowedAction(string $userRole)
+ * @method getClientAllowedAction(string $status)
+ * @method getDoerAllowedAction(string $status)
  */
 
 class TaskStatusAction
@@ -34,10 +35,9 @@ class TaskStatusAction
 	public const CLIENT = 'client';
     public const DOER = 'doer';
 
-    public int $userId = 0;
-    public int $taskId = 0;
-    public string $userRole = self::CLIENT; //можно ли задать тип string, т.к. ожидаем значение константы string? или его не надо заранее прописывать?
-    public string $actualStatus = 'new';
+    private int $clientId = 0;
+    private int $doerId = 0;
+
     public string $status;
     public string $action;
 
@@ -69,12 +69,10 @@ class TaskStatusAction
                 self::ACTION_FINISH => 'finish',
                 ];
 
-    public function __construct(int $userId, int $taskId, string $userRole, string $actualStatus)
+    public function __construct(int $clientId, int $doerId)
     {
-        $this->userId = $userId;
-        $this->taskId = $taskId;
-        $this->userRole = $userRole;
-        $this->actualStatus = $actualStatus;
+        $this->clientId = $clientId;
+        $this->doerId = $doerId;
     }
 
     /**
@@ -101,7 +99,7 @@ class TaskStatusAction
      * @param string $action
      * @return string $actualStatus
      */
-    public function getActualStatus(string $action)
+    public function getActualStatus(string $action) :? string
     {
      	switch ($action) {
     		case self::ACTION_CREATE:
@@ -115,31 +113,43 @@ class TaskStatusAction
         	case self::ACTION_FINISH:
         		return $actualStatus = self::STATUS_FINISH;
         }
+        return null;
     }
 
     /**
-     * метод определяет карту допустимых действий для заказчика и исполнителя
+     * метод определяет карту допустимых действий для заказчика
      * @param string $status
-     * @param string @userRole
      * @return $action;
      */
-     public function getAllowedAction(string $status, string $userRole)
+     public function getClientAllowedAction(string $status) :? string
      {
-         if ($status = self::STATUS_NEW) {
-             switch ($userRole) {
-                 case (self::CLIENT):
-                     return $action = self::ACTION_CANCEL;
-                 case (self::DOER):
-                     return $action = self::ACTION_RESPOND;
+         switch ($status) {
+             case(self::STATUS_NEW):
+                 return $action = self::ACTION_CANCEL;
+             case(self::STATUS_WORKING):
+                 return $action = self::ACTION_FINISH;
+             case(self::STATUS_UNDO && self::STATUS_REFUSAL && self::STATUS_FINISH):
+                 return null;
              }
-         }
-         if ($status = self::STATUS_WORKING) {
-             switch ($userRole) {
-                 case (self::CLIENT):
-                     return $action = self::ACTION_FINISH;
-                 case (self::DOER):
-                     return $action= self::ACTION_REFUSE;
-             }
-         }
+         return null;
      }
+
+    /**
+     * метод определяет карту допустимых действий для исполнителя
+     * @param string $status
+     * @return $action;
+     */
+    public function getDoerAllowedAction(string $status) :? string
+    {
+        switch ($status) {
+            case(self::STATUS_NEW):
+                return $action = self::ACTION_RESPOND;
+            case(self::STATUS_WORKING):
+                return $action = self::ACTION_REFUSE;
+            case(self::STATUS_UNDO && self::STATUS_REFUSAL && self::STATUS_FINISH):
+                return null;
+        }
+        return null;
+    }
+
 }
