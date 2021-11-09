@@ -1,8 +1,0 @@
-<? php
-
-class TaskStatusAction 
-{
-	//свойства класса 
-	public const CLIENT = 'client';
-       public const DOER = 'executor';
-}
