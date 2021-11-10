@@ -14,22 +14,14 @@ assert_options(ASSERT_CALLBACK, function() {
 });
 
 
-$strategy = new TaskStatusAction(5, 2);
+$strategy = new TaskStatusAction(5, 2, 'new');
+assert($strategy->getAllowedAction(TaskStatusAction::STATUS_NEW) == TaskStatusAction::ACTION_CANCEL || TaskStatusAction::ACTION_RESPOND, 'Problem with allowed action for status NEW');
 
-/**
- * проверка работы метода getClientAllowedAction()
- */
-assert($strategy->getClientAllowedAction(TaskStatusAction::STATUS_NEW) == TaskStatusAction::ACTION_CANCEL, 'Problem with allowed action for CLIENT');
-assert($strategy->getClientAllowedAction(TaskStatusAction::STATUS_WORKING) == TaskStatusAction::ACTION_FINISH, 'Problem with allowed action for CLIENT');
 
-/**
- * проверка работы метода getDoerAllowedAction()
- */
-$strategy = new TaskStatusAction(5, 2);
+$strategy = new TaskStatusAction(5, 2, 'working');
+assert($strategy->getAllowedAction(TaskStatusAction::STATUS_WORKING) == TaskStatusAction::ACTION_FINISH || TaskStatusAction::ACTION_REFUSE, 'Problem with allowed action for status WORKING');
 
-assert($strategy->getDoerAllowedAction(TaskStatusAction::STATUS_NEW) == TaskStatusAction::ACTION_RESPOND, 'Problem with allowed action for DOER');
-assert($strategy->getDoerAllowedAction(TaskStatusAction::STATUS_WORKING) == TaskStatusAction::ACTION_REFUSE, 'Problem with allowed action for DOER');
 
 assert(false, 'test Allowed Actions is complete FIN');
 
-?>
+

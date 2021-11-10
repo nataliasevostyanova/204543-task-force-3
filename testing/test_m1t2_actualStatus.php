@@ -15,12 +15,13 @@ assert_options(ASSERT_CALLBACK, function () {
 });
 
 
-$strategy = new TaskStatusAction(5, 2);
+$strategy = new TaskStatusAction(5, 2, 'new');
+assert($strategy->getActualStatus(TaskStatusAction::ACTION_CANCEL) == TaskStatusAction::STATUS_UNDO, 'Problem: expected after CANCEL status "UNDO"');
+assert($strategy->getActualStatus(TaskStatusAction::ACTION_RESPOND) == TaskStatusAction::STATUS_WORKING, 'Problem: expected after RESPOND status "WORKING"');
 
-assert($strategy->getActualStatus(TaskStatusAction::ACTION_CANCEL) == TaskStatusAction::STATUS_UNDO, 'Problem with cancel action: expected status "UNDO"');
-assert($strategy->getActualStatus(TaskStatusAction::ACTION_RESPOND) == TaskStatusAction::STATUS_WORKING, 'Problem with respond action: expected status "WORKING"');
-assert($strategy->getActualStatus(TaskStatusAction::ACTION_FINISH) == TaskStatusAction::STATUS_FINISH, 'Problem with finish action: expected status "FINISH"');
-assert($strategy->getActualStatus(TaskStatusAction::ACTION_REFUSE) == TaskStatusAction::STATUS_REFUSAL, 'Problem with refuse action; expected status "REFUSAL"');
+$strategy = new TaskStatusAction(5, 2, 'working');
+assert($strategy->getActualStatus(TaskStatusAction::ACTION_FINISH) == TaskStatusAction::STATUS_FINISH, 'Problem: expected after FINISH status "FINISH"');
+assert($strategy->getActualStatus(TaskStatusAction::ACTION_REFUSE) == TaskStatusAction::STATUS_REFUSAL, 'Problem: expected after CANCEL status "REFUSAL"');
 
 assert(false, 'test TaskStatusAction::getActualStatus() is complete THE END');
 
