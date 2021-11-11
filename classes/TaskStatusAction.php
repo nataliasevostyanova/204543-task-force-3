@@ -7,8 +7,10 @@ class TaskStatusAction
 {
     private int $clientId;
     private int $doerId;
-    public string $status;
-    //public string $action;
+    private string $status;
+
+    const CLIENT = 'client';
+    const DOER = 'doer';
 
     const STATUS_NEW = 'new';
     const STATUS_UNDO = 'undo';
@@ -48,7 +50,7 @@ class TaskStatusAction
     /**
      * @return array $status
      */
-    public function getStatuses() :? array
+    public function getStatuses() : array
     {
         return $this->statuses;
     }
@@ -56,18 +58,19 @@ class TaskStatusAction
     /**
      * @return array $actions
      */
-    public function getActiones() :? array
+    public function getActiones() : array
     {
         return $this->actions;
     }
 
     /**
+     * метод получает состояние задания после выполнения определенного действия
      * @return string $status
      */
 
-    public function getActualStatus(string $action) :? string
+    public function getActualStatus($action) :? string
     {
-     	switch ($action) {
+        switch ($action) {
     		case (self::ACTION_CREATE):
         		return self::STATUS_NEW;
         	case (self::ACTION_CANCEL):
@@ -83,21 +86,17 @@ class TaskStatusAction
     }
 
     /**
-     * метод определяет карту допустимых действий для заказчика
+     * метод определяет карту допустимых действий для каждого из состояний
      */
-     public function getAllowedAction() :? string
+     public function getAllowedAction() : array
      {
          switch ($this->status) {
              case(self::STATUS_NEW):
-                 return self::ACTION_CANCEL || self::ACTION_RESPOND;
+                 return [self::ACTION_CANCEL, self::ACTION_RESPOND];
              case(self::STATUS_WORKING):
-                 return self::ACTION_FINISH || self::ACTION_REFUSE;
-             case(self::STATUS_UNDO):
-             case(self::STATUS_REFUSAL):
-             case(self::STATUS_FINISH):
-                break;
-             }
-         return null;
+                 return [self::ACTION_FINISH, self::ACTION_REFUSE];
+         }
+         return [];
      }
 }
 

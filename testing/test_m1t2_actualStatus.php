@@ -16,6 +16,7 @@ assert_options(ASSERT_CALLBACK, function () {
 
 
 $strategy = new TaskStatusAction(5, 2, 'new');
+
 assert($strategy->getActualStatus(TaskStatusAction::ACTION_CANCEL) == TaskStatusAction::STATUS_UNDO, 'Problem: expected after CANCEL status "UNDO"');
 assert($strategy->getActualStatus(TaskStatusAction::ACTION_RESPOND) == TaskStatusAction::STATUS_WORKING, 'Problem: expected after RESPOND status "WORKING"');
 

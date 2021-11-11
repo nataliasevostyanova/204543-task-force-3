@@ -15,11 +15,11 @@ assert_options(ASSERT_CALLBACK, function() {
 
 
 $strategy = new TaskStatusAction(5, 2, 'new');
-assert($strategy->getAllowedAction(TaskStatusAction::STATUS_NEW) == TaskStatusAction::ACTION_CANCEL || TaskStatusAction::ACTION_RESPOND, 'Problem with allowed action for status NEW');
+assert($strategy->getAllowedAction(TaskStatusAction::STATUS_NEW) == [TaskStatusAction::ACTION_CANCEL, TaskStatusAction::ACTION_RESPOND], 'Problem with allowed actions for status NEW');
 
 
 $strategy = new TaskStatusAction(5, 2, 'working');
-assert($strategy->getAllowedAction(TaskStatusAction::STATUS_WORKING) == TaskStatusAction::ACTION_FINISH || TaskStatusAction::ACTION_REFUSE, 'Problem with allowed action for status WORKING');
+assert($strategy->getAllowedAction(TaskStatusAction::STATUS_WORKING) == [TaskStatusAction::ACTION_FINISH, TaskStatusAction::ACTION_REFUSE], 'Problem with allowed actions for status WORKING');
 
 
 assert(false, 'test Allowed Actions is complete FIN');
