@@ -4,7 +4,7 @@
  * и все возможные действия с ним
  */
 
-namespace TaskForce\classes;
+namespace TaskForce\myclasses;
 
 class TaskStatusAction
 {

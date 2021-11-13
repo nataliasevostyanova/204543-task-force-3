@@ -5,7 +5,7 @@
 
 require_once '../../vendor/autoload.php';
 
-use TaskForce\classes\TaskStatusAction;
+use TaskForce\myclasses\TaskStatusAction;
 
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_WARNING, 1);
