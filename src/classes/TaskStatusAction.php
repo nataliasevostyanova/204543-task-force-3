@@ -3,6 +3,9 @@
  * Класс описывает все состояния задания
  * и все возможные действия с ним
  */
+
+namespace TaskForce\classes;
+
 class TaskStatusAction
 {
     private int $clientId;
