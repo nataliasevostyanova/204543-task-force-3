@@ -3,9 +3,9 @@
   * testing class TaskStatusAction method getAllowedAction()
   */
 
-require_once '../../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
-use TaskForce\myclasses\TaskStatusAction;
+use TaskForce\TaskStatusAction;
 
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_WARNING, 1);
