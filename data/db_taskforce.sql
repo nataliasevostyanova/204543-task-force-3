@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `category` (
-  `id` int NOT NULL COMMENT 'id категории',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id категории',
   `name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название категории',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -38,7 +38,7 @@ CREATE TABLE `category` (
 --
 
 CREATE TABLE `town` (
-  `id` int NOT NULL COMMENT 'почтовый код города',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'почтовый код города',
   `town` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название города',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Названия городов';
@@ -50,22 +50,20 @@ CREATE TABLE `town` (
 --
 
 CREATE TABLE `user` (
-  `id` int NOT NULL COMMENT 'id пользователя',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id пользователя',
   `full_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'имя и фамилия пользователя',
   `sign_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'дата и время создания аккаунта',
   `role` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'роль: заказчик или исполнитель',
   `phone` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'номер телефона пользователя',
   `email` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'email пользователя',
-  `telegram` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'telegram пользователя',
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'пароль к аккаунту',
-  `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'URL аватара пользователя',
-  `about_user` varchar(450) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'рассказ исполнителя о себе',
-  `birthdate` date NOT NULL COMMENT 'дата рождения',
-  `town_id` int NOT NULL COMMENT 'почтовый код города',
+  `telegram` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'telegram пользователя',
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'пароль к аккаунту',
+  `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'URL аватара пользователя',
+  `about_user` varchar(450) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'рассказ исполнителя о себе',
+  `birthdate` date NULL COMMENT 'дата рождения',
+  `town_id` int NULL COMMENT 'почтовый код города',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `town_id` (`town_id`),
   CONSTRAINT fk_user_town_id
       FOREIGN KEY (town_id)  REFERENCES town (id)
         ON DELETE CASCADE
@@ -73,7 +71,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `task` (
-  `id` int NOT NULL COMMENT 'id задания',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id задания',
   `created_date` datetime NOT NULL COMMENT 'время создания задания',
   `client_id` int NOT NULL COMMENT 'id заказчика',
   `doer_id` int NULL COMMENT 'id  исполнителя',
@@ -87,10 +85,6 @@ CREATE TABLE `task` (
   `finish_date` datetime NOT NULL COMMENT 'дата окончания работ',
   `task_status` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'статус задания',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `client_id_2` (`client_id`),
-  UNIQUE KEY `doer_id` (`doer_id`),
-  INDEX `town_id` (`town_id`),
-  UNIQUE KEY `category_id` (`category_id`) ,
   CONSTRAINT fk_task_client_id
     FOREIGN KEY (client_id)  REFERENCES user (id)
       ON DELETE CASCADE
@@ -117,17 +111,15 @@ CREATE TABLE `task` (
 --
 
 CREATE TABLE `respond` (
-  `id` int NOT NULL COMMENT 'id отклика',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id отклика',
   `task_id` int NOT NULL COMMENT 'id задания',
-  `user_id` int NOT NULL COMMENT 'id  исполнителя',
+  `doer_id` int NOT NULL COMMENT 'id  исполнителя',
   `execute_budget` int NOT NULL COMMENT 'бюджет/стоимость работ',
   `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'текст  отклика на задание',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'время создания отклика на задание',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`),
-  UNIQUE KEY `task_id` (`task_id`),
-  CONSTRAINT fk_respond_user_id
-    FOREIGN KEY (user_id)  REFERENCES user (id)
+  CONSTRAINT fk_respond_doer_id
+    FOREIGN KEY (doer_id)  REFERENCES user (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT fk_respond_task_id
@@ -143,7 +135,7 @@ CREATE TABLE `respond` (
 --
 
 CREATE TABLE `review` (
-  `id` int NOT NULL COMMENT 'id отзыва',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id отзыва',
   `client_id` int NOT NULL COMMENT 'id заказчика',
   `task_id` int NOT NULL COMMENT 'id задания',
   `doer_id` int NOT NULL  COMMENT 'id исполнителя',
@@ -151,9 +143,6 @@ CREATE TABLE `review` (
   `stars` int NULL COMMENT 'оценка выполнения задания 1-5 звёзд',
   `create_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'время создания отзыва',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `client_id` (`client_id`),
-  INDEX `task_id` (`task_id`),
-  UNIQUE KEY `doer_id_2` (`doer_id`),
   CONSTRAINT fk_review_client_id
     FOREIGN KEY (client_id)  REFERENCES user (id)
     ON DELETE CASCADE
@@ -174,13 +163,11 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `userevent` (
-  `id` int NOT NULL COMMENT 'id события',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id события',
   `doer_id` int NOT NULL COMMENT 'id  исполнителя',
   `task_id` int NOT NULL COMMENT 'id  задания',
-  `event` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'наименование события',
+  `event` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'наименование события',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `doer_id` (`doer_id`),
-  INDEX `task_id` (`task_id`),
   CONSTRAINT fk_userevent_doer_id
     FOREIGN KEY (doer_id)  REFERENCES user (id)
       ON DELETE CASCADE
@@ -198,11 +185,10 @@ CREATE TABLE `userevent` (
 --
 
 CREATE TABLE `userimage` (
-  `id` int NOT NULL COMMENT 'id загруженного файла',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id загруженного файла',
   `user_id` int NOT NULL COMMENT 'id пользователя, кто размещает файлы',
   `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'url размещения загруженного файла',
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`user_id`),
   CONSTRAINT fk_userimage_user_id
     FOREIGN KEY (user_id)  REFERENCES user (id)
       ON DELETE CASCADE
@@ -216,7 +202,7 @@ CREATE TABLE `userimage` (
 --
 
 CREATE TABLE `userstatistic` (
-  `user_id` int NOT NULL COMMENT 'id  исполнителя',
+  `user_id` int NOT NULL AUTO_INCREMENT COMMENT 'id  исполнителя',
   `views_number` int NULL COMMENT 'кол-во просмотров аккаунта исполнителя',
   `available_now` tinyint(1) DEFAULT '0' COMMENT 'свободен ли исполнитель',
   `last_visit` datetime NOT NULL COMMENT 'время последнего посещения сайта',
@@ -235,10 +221,9 @@ CREATE TABLE `userstatistic` (
 --
 
 CREATE TABLE `user_category` (
-  `user_id` int NOT NULL COMMENT 'id пользователя',
+  `user_id` int NOT NULL AUTO_INCREMENT COMMENT 'id пользователя',
   `category_id` int NOT NULL COMMENT 'id категории',
-  UNIQUE KEY `user_id` (`user_id`),
-  UNIQUE KEY `category_id` (`category_id`),
+  PRIMARY KEY (`user_id`, `category_id`),
   CONSTRAINT fk_user_category_user_id
     FOREIGN KEY (user_id)  REFERENCES user (id)
       ON DELETE CASCADE
