@@ -176,12 +176,17 @@ CREATE TABLE `review` (
 CREATE TABLE `userevent` (
   `id` int NOT NULL COMMENT 'id события',
   `doer_id` int NOT NULL COMMENT 'id  исполнителя',
+  `task_id` int NOT NULL COMMENT 'id  задания',
   `event` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'наименование события',
-  `event_name` varchar(120) NOT NULL COMMENT 'константа имени события',
   PRIMARY KEY (`id`),
   UNIQUE KEY `doer_id` (`doer_id`),
+  INDEX `task_id` (`task_id`),
   CONSTRAINT fk_userevent_doer_id
     FOREIGN KEY (doer_id)  REFERENCES user (id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE,
+  CONSTRAINT fk_userevent_task_id
+    FOREIGN KEY (task_id)  REFERENCES task (id)
       ON DELETE CASCADE
       ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
