@@ -57,13 +57,14 @@ CREATE TABLE `user` (
   `phone` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'номер телефона пользователя',
   `email` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'email пользователя',
   `telegram` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'telegram пользователя',
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'пароль к аккаунту',
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NOT NULL COMMENT 'пароль к аккаунту',
   `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci  NULL COMMENT 'URL аватара пользователя',
   `about_user` varchar(450) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'рассказ исполнителя о себе',
   `birthdate` date NULL COMMENT 'дата рождения',
   `town_id` int NULL COMMENT 'почтовый код города',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `phone` (`phone`),
   CONSTRAINT fk_user_town_id
       FOREIGN KEY (town_id)  REFERENCES town (id)
         ON DELETE CASCADE
@@ -202,12 +203,12 @@ CREATE TABLE `userimage` (
 --
 
 CREATE TABLE `userstatistic` (
-  `user_id` int NOT NULL AUTO_INCREMENT COMMENT 'id  исполнителя',
+  `user_id` int NOT NULL COMMENT 'id  исполнителя',
   `views_number` int NULL COMMENT 'кол-во просмотров аккаунта исполнителя',
   `available_now` tinyint(1) DEFAULT '0' COMMENT 'свободен ли исполнитель',
   `last_visit` datetime NOT NULL COMMENT 'время последнего посещения сайта',
   `rating` int NULL COMMENT 'место в рейтинге исполнителей по количеству звёзд',
-  UNIQUE KEY `user_id` (`user_id`),
+  PRIMARY KEY `user_id` (`user_id`),
   CONSTRAINT fk_userstatistic_user_id
     FOREIGN KEY (user_id)  REFERENCES user (id)
       ON DELETE CASCADE
@@ -221,7 +222,7 @@ CREATE TABLE `userstatistic` (
 --
 
 CREATE TABLE `user_category` (
-  `user_id` int NOT NULL AUTO_INCREMENT COMMENT 'id пользователя',
+  `user_id` int NOT NULL COMMENT 'id пользователя',
   `category_id` int NOT NULL COMMENT 'id категории',
   PRIMARY KEY (`user_id`, `category_id`),
   CONSTRAINT fk_user_category_user_id
