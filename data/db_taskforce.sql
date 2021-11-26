@@ -208,7 +208,7 @@ CREATE TABLE `userstatistic` (
   `available_now` tinyint(1) DEFAULT '0' COMMENT 'свободен ли исполнитель',
   `last_visit` datetime NOT NULL COMMENT 'время последнего посещения сайта',
   `rating` int NULL COMMENT 'место в рейтинге исполнителей по количеству звёзд',
-  PRIMARY KEY `user_id` (`user_id`),
+  PRIMARY KEY (`user_id`),
   CONSTRAINT fk_userstatistic_user_id
     FOREIGN KEY (user_id)  REFERENCES user (id)
       ON DELETE CASCADE
