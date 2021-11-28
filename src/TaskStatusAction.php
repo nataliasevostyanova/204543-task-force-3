@@ -6,8 +6,15 @@
 
 namespace TaskForce;
 
+use Taskforce\Actions\Action;
+use TaskForce\Actions\ActionCancel;
+use TaskForce\Actions\ActionRespond;
+use TaskForce\Actions\ActionFinish;
+use TaskForce\Actions\ActionRefuse;
+
 class TaskStatusAction
 {
+    private int $userId;
     private int $clientId;
     private int $doerId;
     private string $status;
@@ -43,8 +50,9 @@ class TaskStatusAction
                 self::ACTION_FINISH => 'finish',
                 ];
 
-    public function __construct(int $clientId, int $doerId, string $status)
+    public function __construct(int $userId, int $clientId, int $doerId, string $status)
     {
+        $this->userId = $userId;
         $this->clientId = $clientId;
         $this->doerId = $doerId;
         $this->status = $status;
@@ -101,5 +109,29 @@ class TaskStatusAction
          }
          return [];
      }
+
+    public function getUserAllowedAction(int $userId, int $clientId, int $doerId, string $status) :? string
+    {
+        $actionCancel = new ActionCancel($userId, $clientId, $doerId, $status);
+        if ($actionCancel->accessRightCheck($userId, $clientId, $doerId, $status)) {
+            return $actionCancel -> getActionName();
+        }
+
+        $actionRespond = new ActionRespond($userId, $clientId, $doerId, $status);
+        if ($actionRespond->accessRightCheck($userId, $clientId, $doerId, $status)) {
+            return $actionRespond -> getActionName();
+        }
+
+        $actionFinish = new ActionFinish($userId, $clientId, $doerId, $status);
+        if ($actionFinish->accessRightCheck($userId, $clientId, $doerId, $status)) {
+            return $actionFinish -> getActionName();
+        }
+
+        $actionRefuse = new ActionRefuse($userId, $clientId, $doerId, $status);
+        if ($actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
+            return $actionRefuse -> getActionName();
+        }
+        return null;
+    }
 }
 
