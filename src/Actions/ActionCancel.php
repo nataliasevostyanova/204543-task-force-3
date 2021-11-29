@@ -2,39 +2,40 @@
 
 namespace TaskForce\Actions;
 
+use TaskForce\TaskStatusAction;
 use TaskForce\Actions\Action;
 
 class ActionCancel extends Action
 {
-    private string $actionName;
-
-    public function __construct(int $userId, int $clientId, int $doerId, string $status)
-    {
-        parent::__construct($userId, $clientId, $doerId, $status);
-        $this->actionName = 'cancel';
-    }
+    private const INNER_NAME = 'action_cancel';
 
     /**
-     * @inheritDoc
-     */
-    function getClassName(): string
-    {
-        return get_class();
-    }
-
-    /**
-     * @inheritDoc
+     * получает имя действия
+     * @return string
      */
     public function getActionName(): string
     {
-       return  $this->actionName;
+        return  TaskStatusAction::ACTION_CANCEL;
     }
 
     /**
-     * @inheritDoc
+     * получает внутреннее имя действия
+     * @return string
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
+    public function getInnerName(): string
     {
-        return ($userId == $clientId && $status == 'new');
+        return  self::INNER_NAME;
+    }
+
+    /**
+     * проверяет права пользователя
+     * @param int $userId
+     * @param int $clientId
+     * @param int $doerId
+     * @return bool
+     */
+    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    {
+        return ($userId == $clientId && $userId !== $doerId);
     }
 }

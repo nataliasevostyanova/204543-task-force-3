@@ -76,7 +76,8 @@ class TaskStatusAction
 
     /**
      * метод получает состояние задания после выполнения определенного действия
-     * @return string $status
+     * @param $action
+     * @return string|null
      */
 
     public function getActualStatus($action) :? string
@@ -97,38 +98,32 @@ class TaskStatusAction
     }
 
     /**
-     * метод определяет карту допустимых действий для каждого из состояний
+     * метод определяет карту допустимых действий для пользователя в каждом из состояний задания
+     * @param int $userId
+     * @param int $clientId
+     * @param int $doerId
+     * @param string $status
+     * @return string|null
      */
-     public function getAllowedAction() : array
-     {
-         switch ($this->status) {
-             case(self::STATUS_NEW):
-                 return [self::ACTION_CANCEL, self::ACTION_RESPOND];
-             case(self::STATUS_WORKING):
-                 return [self::ACTION_FINISH, self::ACTION_REFUSE];
-         }
-         return [];
-     }
-
-    public function getUserAllowedAction(int $userId, int $clientId, int $doerId, string $status) :? string
+    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) :? string
     {
-        $actionCancel = new ActionCancel($userId, $clientId, $doerId, $status);
-        if ($actionCancel->accessRightCheck($userId, $clientId, $doerId, $status)) {
-            return $actionCancel -> getActionName();
+        $actionCancel = new ActionCancel();
+        if ($this->status == 'new' && $actionCancel->accessRightCheck($userId, $clientId, $doerId)) {
+            return $actionCancel->getActionName();
         }
 
-        $actionRespond = new ActionRespond($userId, $clientId, $doerId, $status);
-        if ($actionRespond->accessRightCheck($userId, $clientId, $doerId, $status)) {
+        $actionRespond = new ActionRespond($userId, $clientId, $doerId);
+        if ($this->status == 'new' && $actionRespond->accessRightCheck($userId, $clientId, $doerId)) {
             return $actionRespond -> getActionName();
         }
 
-        $actionFinish = new ActionFinish($userId, $clientId, $doerId, $status);
-        if ($actionFinish->accessRightCheck($userId, $clientId, $doerId, $status)) {
+        $actionFinish = new ActionFinish($userId, $clientId, $doerId);
+        if ($this->status == 'working' && $actionFinish->accessRightCheck($userId, $clientId, $doerId)) {
             return $actionFinish -> getActionName();
         }
 
         $actionRefuse = new ActionRefuse($userId, $clientId, $doerId, $status);
-        if ($actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
+        if ($this->status == 'working' && $actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
             return $actionRefuse -> getActionName();
         }
         return null;

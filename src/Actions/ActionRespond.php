@@ -2,39 +2,40 @@
 
 namespace TaskForce\Actions;
 
+use TaskForce\TaskStatusAction;
 use TaskForce\Actions\Action;
 
 class ActionRespond extends Action
 {
-    private string $actionName;
-
-    public function __construct(int $userId, int $clientId, int $doerId, string $status)
-    {
-        parent::__construct($userId, $clientId, $doerId, $status);
-        $this->actionName = 'respond';
-    }
+    private const INNER_NAME = 'action_respond';
 
     /**
-     * @inheritDoc
-     */
-    function getClassName(): string
-    {
-        return get_class();
-    }
-
-    /**
-     * @inheritDoc
+     * получает имя действия
+     * @return string
      */
     public function getActionName(): string
     {
-       return  $this->actionName;
+        return  TaskStatusAction::ACTION_RESPOND;
     }
 
     /**
-     * @inheritDoc
+     * получает внутреннее имя действия
+     * @return string
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
+    public function getInnerName(): string
     {
-        return ($userId == $doerId && $status == 'new');
+        return  self::INNER_NAME;
+    }
+
+    /**
+     * проверяет права пользователя
+     * @param int $userId
+     * @param int $clientId
+     * @param int $doerId
+     * @return bool
+     */
+    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    {
+        return ($userId == $doerId && $userId !== $clientId);
     }
 }
