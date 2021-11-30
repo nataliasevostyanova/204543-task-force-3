@@ -7,15 +7,13 @@ use TaskForce\Actions\Action;
 
 class ActionRefuse extends Action
 {
-    private const INNER_NAME = 'action_refuse';
-
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  TaskStatusAction::ACTION_REFUSE;
+        return 'отказаться';
     }
 
     /**
@@ -24,7 +22,7 @@ class ActionRefuse extends Action
      */
     public function getInnerName(): string
     {
-        return  self::INNER_NAME;
+        return  TaskStatusAction::ACTION_REFUSE;
     }
 
     /**

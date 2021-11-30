@@ -7,15 +7,13 @@ use TaskForce\Actions\Action;
 
 class ActionCancel extends Action
 {
-    private const INNER_NAME = 'action_cancel';
-
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  TaskStatusAction::ACTION_CANCEL;
+        return 'отменить' ;
     }
 
     /**
@@ -24,7 +22,7 @@ class ActionCancel extends Action
      */
     public function getInnerName(): string
     {
-        return  self::INNER_NAME;
+        return  TaskStatusAction::ACTION_CANCEL;
     }
 
     /**

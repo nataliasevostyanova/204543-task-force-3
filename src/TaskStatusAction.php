@@ -109,22 +109,22 @@ class TaskStatusAction
     {
         $actionCancel = new ActionCancel();
         if ($this->status == 'new' && $actionCancel->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionCancel->getActionName();
+            return $actionCancel->getInnerName();
         }
 
         $actionRespond = new ActionRespond($userId, $clientId, $doerId);
         if ($this->status == 'new' && $actionRespond->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionRespond -> getActionName();
+            return $actionRespond -> getInnerName();
         }
 
         $actionFinish = new ActionFinish($userId, $clientId, $doerId);
         if ($this->status == 'working' && $actionFinish->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionFinish -> getActionName();
+            return $actionFinish -> getInnerName();
         }
 
         $actionRefuse = new ActionRefuse($userId, $clientId, $doerId, $status);
         if ($this->status == 'working' && $actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
-            return $actionRefuse -> getActionName();
+            return $actionRefuse -> getInnerName();
         }
         return null;
     }

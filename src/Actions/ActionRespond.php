@@ -7,15 +7,13 @@ use TaskForce\Actions\Action;
 
 class ActionRespond extends Action
 {
-    private const INNER_NAME = 'action_respond';
-
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  TaskStatusAction::ACTION_RESPOND;
+        return  'откликнуться';
     }
 
     /**
@@ -24,7 +22,7 @@ class ActionRespond extends Action
      */
     public function getInnerName(): string
     {
-        return  self::INNER_NAME;
+        return  TaskStatusAction::ACTION_RESPOND;
     }
 
     /**

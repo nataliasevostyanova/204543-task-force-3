@@ -7,15 +7,13 @@ use TaskForce\Actions\Action;
 
 class ActionFinish extends Action
 {
-    private const INNER_NAME = 'action_finish';
-
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  TaskStatusAction::ACTION_FINISH;
+        return  'завершить';
     }
 
     /**
@@ -24,7 +22,7 @@ class ActionFinish extends Action
      */
     public function getInnerName(): string
     {
-        return  self::INNER_NAME;
+        return  TaskStatusAction::ACTION_FINISH;
     }
 
     /**
