@@ -6,8 +6,15 @@
 
 namespace TaskForce;
 
+use Taskforce\Actions\Action;
+use TaskForce\Actions\ActionCancel;
+use TaskForce\Actions\ActionRespond;
+use TaskForce\Actions\ActionFinish;
+use TaskForce\Actions\ActionRefuse;
+
 class TaskStatusAction
 {
+    private int $userId;
     private int $clientId;
     private int $doerId;
     private string $status;
@@ -43,8 +50,9 @@ class TaskStatusAction
                 self::ACTION_FINISH => 'finish',
                 ];
 
-    public function __construct(int $clientId, int $doerId, string $status)
+    public function __construct(int $userId, int $clientId, int $doerId, string $status)
     {
+        $this->userId = $userId;
         $this->clientId = $clientId;
         $this->doerId = $doerId;
         $this->status = $status;
@@ -68,7 +76,8 @@ class TaskStatusAction
 
     /**
      * метод получает состояние задания после выполнения определенного действия
-     * @return string $status
+     * @param $action
+     * @return string|null
      */
 
     public function getActualStatus($action) :? string
@@ -89,17 +98,35 @@ class TaskStatusAction
     }
 
     /**
-     * метод определяет карту допустимых действий для каждого из состояний
+     * метод определяет карту допустимых действий для пользователя в каждом из состояний задания
+     * @param int $userId
+     * @param int $clientId
+     * @param int $doerId
+     * @param string $status
+     * @return string|null
      */
-     public function getAllowedAction() : array
-     {
-         switch ($this->status) {
-             case(self::STATUS_NEW):
-                 return [self::ACTION_CANCEL, self::ACTION_RESPOND];
-             case(self::STATUS_WORKING):
-                 return [self::ACTION_FINISH, self::ACTION_REFUSE];
-         }
-         return [];
-     }
+    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) :? string
+    {
+        $actionCancel = new ActionCancel();
+        if ($this->status == 'new' && $actionCancel->accessRightCheck($userId, $clientId, $doerId)) {
+            return $actionCancel->getInnerName();
+        }
+
+        $actionRespond = new ActionRespond($userId, $clientId, $doerId);
+        if ($this->status == 'new' && $actionRespond->accessRightCheck($userId, $clientId, $doerId)) {
+            return $actionRespond -> getInnerName();
+        }
+
+        $actionFinish = new ActionFinish($userId, $clientId, $doerId);
+        if ($this->status == 'working' && $actionFinish->accessRightCheck($userId, $clientId, $doerId)) {
+            return $actionFinish -> getInnerName();
+        }
+
+        $actionRefuse = new ActionRefuse($userId, $clientId, $doerId, $status);
+        if ($this->status == 'working' && $actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
+            return $actionRefuse -> getInnerName();
+        }
+        return null;
+    }
 }
 
