@@ -72,15 +72,7 @@ class TaskStatusAction
     public function getActiones() : array
     {
         return $this->actions;
-        /*$actions = [ActCancel::class, ActRespond::class, ActDone::class, ActRefuse::class];
-        $action_map = [];
-
-        foreach ($actions as $action_key) {
-            $action = $this->getAction($action_key);
-            $action_map[$action->getInnerName()] = $action->getName();
-        }
-
-        return $action_map;*/
+        
     }
 
     /**
