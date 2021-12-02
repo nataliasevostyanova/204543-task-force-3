@@ -30,10 +30,11 @@ class ActionRefuse extends Action
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
+     * @param string $status
      * @return bool
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId);
+        return ($userId == $doerId && $userId !== $clientId && $status == 'working');
     }
 }
