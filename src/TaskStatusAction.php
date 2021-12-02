@@ -72,6 +72,15 @@ class TaskStatusAction
     public function getActiones() : array
     {
         return $this->actions;
+        /*$actions = [ActCancel::class, ActRespond::class, ActDone::class, ActRefuse::class];
+        $action_map = [];
+
+        foreach ($actions as $action_key) {
+            $action = $this->getAction($action_key);
+            $action_map[$action->getInnerName()] = $action->getName();
+        }
+
+        return $action_map;*/
     }
 
     /**
@@ -105,28 +114,19 @@ class TaskStatusAction
      * @param string $status
      * @return string|null
      */
-    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) :? string
+    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) : string|array
     {
-        $actionCancel = new ActionCancel();
-        if ($this->status == 'new' && $actionCancel->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionCancel->getInnerName();
-        }
+        $actions = [new ActionCancel(), new ActionRespond(), new ActionFinish(), new ActionRefuse];
 
-        $actionRespond = new ActionRespond($userId, $clientId, $doerId);
-        if ($this->status == 'new' && $actionRespond->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionRespond -> getInnerName();
-        }
+        $allowedAction = [];
 
-        $actionFinish = new ActionFinish($userId, $clientId, $doerId);
-        if ($this->status == 'working' && $actionFinish->accessRightCheck($userId, $clientId, $doerId)) {
-            return $actionFinish -> getInnerName();
+        foreach ($actions as $action)
+        {
+            if ($action->accessRightCheck($userId, $clientId, $doerId, $status)){
+                $allowedAction = $action->getActionName();
+            }
         }
-
-        $actionRefuse = new ActionRefuse($userId, $clientId, $doerId, $status);
-        if ($this->status == 'working' && $actionRefuse->accessRightCheck($userId, $clientId, $doerId, $status)) {
-            return $actionRefuse -> getInnerName();
-        }
-        return null;
+        return $allowedAction;
     }
 }
 
