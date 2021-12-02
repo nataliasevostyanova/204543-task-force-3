@@ -24,8 +24,9 @@ abstract class Action
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
+     * @param string $status
      * @return bool
      */
-    abstract protected function accessRightCheck(int $userId, int $clientId, int $doerId) :bool;
+    abstract protected function accessRightCheck(int $userId, int $clientId, int $doerId, string $status) :bool;
 }
 

@@ -30,10 +30,11 @@ class ActionFinish extends Action
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
+     * @param string $status
      * @return bool
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId);
+        return ($userId == $clientId && $userId !== $doerId && $status == 'working');
     }
 }
