@@ -11,13 +11,17 @@ use TaskForce\Actions\ActionCancel;
 use TaskForce\Actions\ActionRespond;
 use TaskForce\Actions\ActionFinish;
 use TaskForce\Actions\ActionRefuse;
+use TaskForce\Exceptions\WrongStatusException;
+use TaskForce\Exceptions\WrongActionException;
 
-class TaskStatusAction
+class Task
 {
     private int $userId;
     private int $clientId;
     private int $doerId;
     private string $status;
+    private string $action;
+
 
     const CLIENT = 'client';
     const DOER = 'doer';
@@ -35,20 +39,21 @@ class TaskStatusAction
     const ACTION_FINISH = 'finish';
 
     private array $statuses = [
-                 self::STATUS_NEW => 'new',
-                 self::STATUS_UNDO => 'undo',
-                 self::STATUS_WORKING => 'working',
-                 self::STATUS_REFUSAL => 'failed',
-                 self::STATUS_FINISH => 'finished',
+                 self::STATUS_NEW => 'новое',
+                 self::STATUS_UNDO => 'отменено',
+                 self::STATUS_WORKING => 'в работе',
+                 self::STATUS_REFUSAL => 'провалено',
+                 self::STATUS_FINISH => 'завершено',
                 ];
 
     private array $actions = [
-                self::ACTION_CREATE => 'create',
-                self::ACTION_CANCEL =>'cancel',
-                self::ACTION_RESPOND => 'respond',
-                self::ACTION_REFUSE => 'refuse',
-                self::ACTION_FINISH => 'finish',
+                self::ACTION_CREATE => 'создать',
+                self::ACTION_CANCEL =>'отменить',
+                self::ACTION_RESPOND => 'откликнуться',
+                self::ACTION_REFUSE => 'отказаться',
+                self::ACTION_FINISH => 'завершить',
                 ];
+
 
     public function __construct(int $userId, int $clientId, int $doerId, string $status)
     {
@@ -66,23 +71,41 @@ class TaskStatusAction
         return $this->statuses;
     }
 
+    private function validateStatus (string $status) : void
+    {
+        if (!in_array($status, $this->getStatuses())) {
+            throw new WrongStatusException("Неправильное значение статуса задания");
+        }
+    }
+
     /**
      * @return array $actions
      */
-    public function getActiones() : array
+    public function getActions() : array
     {
         return $this->actions;
-        
+    }
+
+    private function validateAction (string $action) : void
+    {
+        if (!in_array($action, $this->getActions())) {
+            throw new WrongActionException("Нет такого действия с заданием");
+        }
     }
 
     /**
      * метод получает состояние задания после выполнения определенного действия
-     * @param $action
+     * @param string $action
+     * @param array $actions
      * @return string|null
+     * @throws WrongActionException
      */
-
-    public function getActualStatus($action) :? string
+    public function getActualStatus(string $action) :? string
     {
+
+        $this->validateAction($action);
+        $this->action = $action;
+
         switch ($action) {
     		case (self::ACTION_CREATE):
         		return self::STATUS_NEW;
@@ -104,10 +127,14 @@ class TaskStatusAction
      * @param int $clientId
      * @param int $doerId
      * @param string $status
-     * @return string|null
+     * @throws WrongStatusException
+     * @return string|array
      */
     public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) : string|array
     {
+        $this->validateStatus($status);
+        $this->status = $status;
+
         $actions = [new ActionCancel(), new ActionRespond(), new ActionFinish(), new ActionRefuse];
 
         $allowedAction = [];

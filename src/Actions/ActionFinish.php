@@ -2,7 +2,7 @@
 
 namespace TaskForce\Actions;
 
-use TaskForce\TaskStatusAction;
+use TaskForce\Task;
 use TaskForce\Actions\Action;
 
 class ActionFinish extends Action
@@ -22,7 +22,7 @@ class ActionFinish extends Action
      */
     public function getInnerName(): string
     {
-        return  TaskStatusAction::ACTION_FINISH;
+        return  Task::ACTION_FINISH;
     }
 
     /**
@@ -35,6 +35,6 @@ class ActionFinish extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId && $status == 'working');
+        return ($userId == $clientId && $userId !== $doerId && $status == 'в работе');
     }
 }
