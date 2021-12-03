@@ -96,7 +96,6 @@ class Task
     /**
      * метод получает состояние задания после выполнения определенного действия
      * @param string $action
-     * @param array $actions
      * @return string|null
      * @throws WrongActionException
      */
