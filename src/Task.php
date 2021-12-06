@@ -7,6 +7,7 @@
 namespace TaskForce;
 
 use Taskforce\Actions\Action;
+use TaskForce\Actions\ActionCreate;
 use TaskForce\Actions\ActionCancel;
 use TaskForce\Actions\ActionRespond;
 use TaskForce\Actions\ActionFinish;
@@ -38,23 +39,6 @@ class Task
     const ACTION_REFUSE = 'refuse';
     const ACTION_FINISH = 'finish';
 
-    private array $statuses = [
-                 self::STATUS_NEW => 'новое',
-                 self::STATUS_UNDO => 'отменено',
-                 self::STATUS_WORKING => 'в работе',
-                 self::STATUS_REFUSAL => 'провалено',
-                 self::STATUS_FINISH => 'завершено',
-                ];
-
-    private array $actions = [
-                self::ACTION_CREATE => 'создать',
-                self::ACTION_CANCEL =>'отменить',
-                self::ACTION_RESPOND => 'откликнуться',
-                self::ACTION_REFUSE => 'отказаться',
-                self::ACTION_FINISH => 'завершить',
-                ];
-
-
     public function __construct(int $userId, int $clientId, int $doerId, string $status)
     {
         $this->userId = $userId;
@@ -64,31 +48,56 @@ class Task
     }
 
     /**
+     * возвращает все возможные состояния задания
      * @return array $status
      */
-    public function getStatuses() : array
+    public function getStatus() : array
     {
-        return $this->statuses;
+        return [
+            self::STATUS_NEW => 'новое',
+            self::STATUS_UNDO => 'отменено',
+            self::STATUS_WORKING => 'в работе',
+            self::STATUS_REFUSAL => 'провалено',
+            self::STATUS_FINISH => 'завершено',
+        ];
+    }
+    /**
+     * возвращает все допустимые действия с заданием
+     * @return array $actions
+     */
+    public function getAction() : array
+    {
+        return  [
+            self::ACTION_CREATE => 'создать',
+            self::ACTION_CANCEL =>'отменить',
+            self::ACTION_RESPOND => 'откликнуться',
+            self::ACTION_REFUSE => 'отказаться',
+            self::ACTION_FINISH => 'завершить',
+        ];
     }
 
+    /**
+     * проверяет валидность статуса
+     * @param string $status
+     * @return void
+     * @throws WrongStatusException
+     */
     private function validateStatus (string $status) : void
     {
-        if (!in_array($status, $this->getStatuses())) {
-            throw new WrongStatusException("Неправильное значение статуса задания");
+        if (!array_key_exists($status, $this->getStatus())) {
+        throw new WrongStatusException("Неправильное значение статуса задания");
         }
     }
 
     /**
-     * @return array $actions
+     * проверяет допустимость действия
+     * @param string $action
+     * @return void
+     * @throws WrongActionException
      */
-    public function getActions() : array
-    {
-        return $this->actions;
-    }
-
     private function validateAction (string $action) : void
     {
-        if (!in_array($action, $this->getActions())) {
+        if (!array_key_exists($action, $this->getAction())) {
             throw new WrongActionException("Нет такого действия с заданием");
         }
     }
@@ -101,9 +110,7 @@ class Task
      */
     public function getActualStatus(string $action) :? string
     {
-
         $this->validateAction($action);
-        $this->action = $action;
 
         switch ($action) {
     		case (self::ACTION_CREATE):
@@ -121,18 +128,17 @@ class Task
     }
 
     /**
-     * метод определяет карту допустимых действий для пользователя в каждом из состояний задания
+     * метод определяет допустимые действия для пользователя в каждом из состояний задания
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
      * @param string $status
      * @throws WrongStatusException
-     * @return string|array
+     * @return array
      */
-    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) : string|array
+    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) : array
     {
         $this->validateStatus($status);
-        $this->status = $status;
 
         $actions = [new ActionCancel(), new ActionRespond(), new ActionFinish(), new ActionRefuse];
 
@@ -141,7 +147,7 @@ class Task
         foreach ($actions as $action)
         {
             if ($action->accessRightCheck($userId, $clientId, $doerId, $status)){
-                $allowedAction = $action->getActionName();
+                $allowedAction[] = $action->getInnerName();
             }
         }
         return $allowedAction;
