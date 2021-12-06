@@ -22,11 +22,11 @@ $errors1 = [];
 /**
  * проверяем исключение, выброшенное в Task->getAllowedAction() при валидации $status
  */
-$task2 = new Task(4, 4, 7, 'просроченное');
+$task2 = new Task(4, 4, 7, 'last');
 $errors2 = [];
 try {
 
-        $task2->getAllowedAction(4, 4, 7, 'просроченное');
+        $task2->getAllowedAction(4, 4, 7, 'last');
 
     }   catch(WrongStatusException $e) {
 
@@ -34,10 +34,10 @@ try {
 
         }
 
-echo '<pre> Ошибки статуса: ';
+echo '<pre> Ошибки действий: ';
 var_dump($errors1);
 echo '</pre>';
-echo '<pre> Ошибки действий: ';
+echo '<pre> Ошибки статуса: ';
 var_dump($errors2);
 echo '</pre>';
 
