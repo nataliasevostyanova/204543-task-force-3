@@ -9,7 +9,7 @@ use TaskForce\Exceptions\WrongStatusException;
 /**
  * проверяем исключение, выброшенное Task->getActualStatus() при валидации $action
  */
-$task1 = new Task(5,5,3,'новое');
+$task1 = new Task(5,5,3,'new');
 $errors1 = [];
      try {
 
@@ -42,5 +42,5 @@ var_dump($errors2);
 echo '</pre>';
 
 
-  
+
 

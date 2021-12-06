@@ -20,41 +20,52 @@ assert_options(ASSERT_CALLBACK, function() {
     echo '<hr />';
 });
 
-$strategy = new Task(4, 4, 3,'новое');
+$task = new Task(4, 4, 3,'new');
+$al_action = array_shift($task->getAllowedAction(4, 4, 3,'new'));
 $action = new ActionCancel();
-/*
-echo '$strategy:  ';
+
+echo '$task:  ';
+/*echo '<pre>';
+var_dump($task->getAction());
+echo '</pre>';
+echo '<pre>';
+var_dump($task->getStatus());
+echo '</pre>';
+*/
+var_dump($task->getAllowedAction(4, 4, 3,'new'));
 echo '<br>';
-var_dump($strategy->getActions());
-echo '<br>';
-var_dump($strategy->getStatuses());
-echo '<br>';
-var_dump($strategy->getAllowedAction(4, 4, 3,'новое'));
+var_dump($al_action);
 echo '<br>';
 echo '$action:  ';
-var_dump($action->accessRightCheck(4, 4, 3, 'новое'));
+var_dump($action->accessRightCheck(4, 4, 3, 'new'));
 echo '<br>';
-var_dump($action->getActionName());
-*/
+var_dump($action->getInnerName());
 
-assert($strategy->getAllowedAction(4, 4, 3,'новое') == $action->getActionName(4, 4, 3), 'Problem of client with allowed actions for status NEW');
+assert($al_action == $action->getInnerName(4, 4, 3), 'Problem of client with allowed actions for status NEW');
 
-$strategy = new Task(3, 4, 3,'новое');
+$task = new Task(3, 4, 3,'new');
+$al_action = array_shift($task->getAllowedAction(3, 4, 3,'new'));
 $action = new ActionRespond();
-assert($strategy->getAllowedAction(3, 4, 3,'новое') == $action->getActionName(3, 4, 3), 'Problem of doer with allowed actions for status NEW');
+assert($al_action == $action->getInnerName(3, 4, 3), 'Problem of doer with allowed actions for status NEW');
 
-$strategy = new Task(3, 4, 3,'в работе');
+
+$task = new Task(4, 4, 3,'working');
+$al_action = array_shift($task->getAllowedAction(4, 4, 3,'working'));
 $action = new ActionFinish();
-assert($strategy->getAllowedAction(4, 4, 3,'в работе') == $action->getActionName(4, 4, 3), 'Problem of client with allowed actions for status WORKING');
+assert($al_action== $action->getInnerName(4, 4, 3), 'Problem of client with allowed actions for status WORKING');
 
-$strategy = new Task(3, 4, 3,'в работе');
-$action = new ActionRefuse();
-assert($strategy->getAllowedAction(3, 4, 3,'в работе') == $action->getActionName(3, 4, 3), 'Problem of doer with allowed actions for status WORKING');
 
-$strategy = new Task(10, 4, 3,'в работе');
+$task = new Task(3, 4, 3,'working');
+$al_action = array_shift($task->getAllowedAction(3, 4, 3,'working'));
 $action = new ActionRefuse();
 
-//assert($strategy->getAllowedAction(10, 4, 3,'working') == $action->getActionName(10, 4, 3), 'User does not exist');
+assert($al_action == $action->getInnerName(3, 4, 3), 'Problem of doer with allowed actions for status WORKING');
+
+$task = new Task(10, 4, 3,'working');
+$al_action = array_shift($task->getAllowedAction(10, 4, 3,'working'));
+$action = new ActionRefuse();
+
+//assert($al_action == $action->getInnerName(10, 4, 3), 'User does not exist');
 
 echo '<hr/>';
 echo '<h3 style="color: red">test Allowed Actions completed. FIN</h3>';
