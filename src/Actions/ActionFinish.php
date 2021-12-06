@@ -7,13 +7,16 @@ use TaskForce\Actions\Action;
 
 class ActionFinish extends Action
 {
+    const ACTION_NAME = 'завершить';
+    const INNER_NAME = 'finish';
+
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  'завершить';
+        return self::ACTION_NAME;;
     }
 
     /**
@@ -22,7 +25,7 @@ class ActionFinish extends Action
      */
     public function getInnerName(): string
     {
-        return  Task::ACTION_FINISH;
+        return  self::INNER_NAME;
     }
 
     /**
@@ -35,6 +38,6 @@ class ActionFinish extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId && $status == 'в работе');
+        return ($userId == $clientId && $userId !== $doerId && $status == Task::STATUS_WORKING);
     }
 }

@@ -7,13 +7,16 @@ use TaskForce\Actions\Action;
 
 class ActionRespond extends Action
 {
+    const ACTION_NAME = 'откликнуться';
+    const INNER_NAME = 'respond';
+
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  'откликнуться';
+        return self::ACTION_NAME;;
     }
 
     /**
@@ -22,7 +25,7 @@ class ActionRespond extends Action
      */
     public function getInnerName(): string
     {
-        return  Task::ACTION_RESPOND;
+        return  self::INNER_NAME;
     }
 
     /**
@@ -35,6 +38,6 @@ class ActionRespond extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId && $status == 'новое');
+        return ($userId == $doerId && $userId !== $clientId && $status == Task::STATUS_NEW);
     }
 }

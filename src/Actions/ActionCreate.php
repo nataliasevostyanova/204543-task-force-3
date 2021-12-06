@@ -5,10 +5,11 @@ namespace TaskForce\Actions;
 use TaskForce\Task;
 use TaskForce\Actions\Action;
 
-class ActionRefuse extends Action
+class ActionCreate extends Action
 {
-    const ACTION_NAME = 'отказаться';
-    const INNER_NAME = 'refuse';
+    const ACTION_NAME = 'создать';
+    const INNER_NAME = 'create';
+
     /**
      * получает имя действия
      * @return string
@@ -24,7 +25,7 @@ class ActionRefuse extends Action
      */
     public function getInnerName(): string
     {
-        return  self::INNER_NAME;;
+        return  self::INNER_NAME;
     }
 
     /**
@@ -37,6 +38,6 @@ class ActionRefuse extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId && $status == task::STATUS_WORKING);
+        return ($userId == $clientId && $userId !== $doerId && $status == null);
     }
 }

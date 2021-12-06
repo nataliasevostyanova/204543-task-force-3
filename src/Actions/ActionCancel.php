@@ -7,13 +7,16 @@ use TaskForce\Actions\Action;
 
 class ActionCancel extends Action
 {
+    const ACTION_NAME = 'отменить';
+    const INNER_NAME = 'cancel';
+
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return 'отменить' ;
+        return self::ACTION_NAME;
     }
 
     /**
@@ -22,7 +25,7 @@ class ActionCancel extends Action
      */
     public function getInnerName(): string
     {
-        return  Task::ACTION_CANCEL;
+        return  self::INNER_NAME;
     }
 
     /**
@@ -35,6 +38,6 @@ class ActionCancel extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId && $status == 'новое');
+        return ($userId == $clientId && $userId !== $doerId && $status == Task::STATUS_NEW);
     }
 }
