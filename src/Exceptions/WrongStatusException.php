@@ -1,17 +1,18 @@
 <?php
 
-/**
- * Класс-исключение для проверки допустимого статуса в задании Task
- */
 namespace TaskForce\Exceptions;
 
 /**
- * @param string $message является обязательным
+ * Класс-исключение для проверки допустимого статуса в задании Task
  */
 class WrongStatusException extends \Exception
 {
-    public function __construct($message = null)
+    /**
+     * @param string $message является обязательным
+     */
+    public function __construct(string $message)
     {
         parent::__construct($message);
+        $this->message = $message;
     }
 }
