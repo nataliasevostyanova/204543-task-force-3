@@ -11,28 +11,28 @@ use TaskForce\Exceptions\WrongStatusException;
  */
 $task1 = new Task(5,5,3,'new');
 $errors1 = [];
-     try {
+try {
 
-        $task1->getActualStatus('отключить');
+    $task1->getActualStatus('отключить');
 
-    } catch(WrongActionException $e) {
+} catch(WrongActionException $e) {
 
-       $errors1 = $e->getMessage();
-    }
+    $errors1 = $e->getMessage();
+}
+
+
 /**
- * проверяем исключение, выброшенное в Task->getAllowedAction() при валидации $status
+ * проверяем исключение, выброшенное в Task->validateStatus() при валидации $status при передаче в конструктор
  */
-$task2 = new Task(4, 4, 7, 'last');
 $errors2 = [];
 try {
 
-        $task2->getAllowedAction(4, 4, 7, 'last');
+    $task2 = new Task(1,1,1,'old');
 
-    }   catch(WrongStatusException $e) {
+} catch(WrongStatusException $e) {
+    $errors2 = $e->getMessage();
+}
 
-        $errors2 = $e->getMessage();
-
-        }
 
 echo '<pre> Ошибки действий: ';
 var_dump($errors1);
