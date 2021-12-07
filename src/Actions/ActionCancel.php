@@ -38,6 +38,6 @@ class ActionCancel extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId && $status == Task::STATUS_NEW);
+        return ($userId === $clientId && $userId !== $doerId && $status === Task::STATUS_NEW);
     }
 }

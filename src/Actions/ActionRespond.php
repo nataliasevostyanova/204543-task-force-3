@@ -38,6 +38,6 @@ class ActionRespond extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId && $status == Task::STATUS_NEW);
+        return ($userId === $doerId && $userId !== $clientId && $status === Task::STATUS_NEW);
     }
 }

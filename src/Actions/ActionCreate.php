@@ -38,6 +38,6 @@ class ActionCreate extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $clientId && $userId !== $doerId && $status == null);
+        return ($userId === $clientId && $userId !== $doerId && $status == null);
     }
 }
