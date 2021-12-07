@@ -39,14 +39,6 @@ class Task
     const ACTION_REFUSE = 'refuse';
     const ACTION_FINISH = 'finish';
 
-    public function __construct(int $userId, int $clientId, int $doerId, string $status)
-    {
-        $this->userId = $userId;
-        $this->clientId = $clientId;
-        $this->doerId = $doerId;
-        $this->status = $status;
-    }
-
     /**
      * возвращает все возможные состояния задания
      * @return array $status
@@ -61,6 +53,30 @@ class Task
             self::STATUS_FINISH => 'завершено',
         ];
     }
+
+    /**
+     * проверяет валидность статуса
+     * @param string $status
+     * @return void
+     * @throws WrongStatusException
+     */
+    public function validateStatus (string $status) : void
+    {
+        if (!array_key_exists($status, $this->getStatus())) {
+            throw new WrongStatusException("Неправильное значение статуса задания");
+        }
+    }
+
+    public function __construct(int $userId, int $clientId, int $doerId, string $status)
+    {
+        $this->userId = $userId;
+        $this->clientId = $clientId;
+        $this->doerId = $doerId;
+        $this->validateStatus($status);
+        $this->status = $status;
+    }
+
+
     /**
      * возвращает все допустимые действия с заданием
      * @return array $actions
@@ -76,18 +92,7 @@ class Task
         ];
     }
 
-    /**
-     * проверяет валидность статуса
-     * @param string $status
-     * @return void
-     * @throws WrongStatusException
-     */
-    private function validateStatus (string $status) : void
-    {
-        if (!array_key_exists($status, $this->getStatus())) {
-        throw new WrongStatusException("Неправильное значение статуса задания");
-        }
-    }
+
 
     /**
      * проверяет допустимость действия
@@ -95,7 +100,7 @@ class Task
      * @return void
      * @throws WrongActionException
      */
-    private function validateAction (string $action) : void
+    public function validateAction (string $action) : void
     {
         if (!array_key_exists($action, $this->getAction())) {
             throw new WrongActionException("Нет такого действия с заданием");
