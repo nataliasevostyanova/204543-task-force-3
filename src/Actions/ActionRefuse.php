@@ -2,18 +2,20 @@
 
 namespace TaskForce\Actions;
 
-use TaskForce\TaskStatusAction;
+use TaskForce\Task;
 use TaskForce\Actions\Action;
 
 class ActionRefuse extends Action
 {
+    const ACTION_NAME = 'отказаться';
+    const INNER_NAME = 'refuse';
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return 'отказаться';
+        return self::ACTION_NAME;
     }
 
     /**
@@ -22,7 +24,7 @@ class ActionRefuse extends Action
      */
     public function getInnerName(): string
     {
-        return  TaskStatusAction::ACTION_REFUSE;
+        return  self::INNER_NAME;;
     }
 
     /**
@@ -30,10 +32,11 @@ class ActionRefuse extends Action
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
+     * @param string $status
      * @return bool
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId);
+        return ($userId === $doerId && $userId !== $clientId && $status === Task::STATUS_WORKING);
     }
 }

@@ -2,18 +2,21 @@
 
 namespace TaskForce\Actions;
 
-use TaskForce\TaskStatusAction;
+use TaskForce\Task;
 use TaskForce\Actions\Action;
 
 class ActionRespond extends Action
 {
+    const ACTION_NAME = 'откликнуться';
+    const INNER_NAME = 'respond';
+
     /**
      * получает имя действия
      * @return string
      */
     public function getActionName(): string
     {
-        return  'откликнуться';
+        return self::ACTION_NAME;;
     }
 
     /**
@@ -22,7 +25,7 @@ class ActionRespond extends Action
      */
     public function getInnerName(): string
     {
-        return  TaskStatusAction::ACTION_RESPOND;
+        return  self::INNER_NAME;
     }
 
     /**
@@ -30,10 +33,11 @@ class ActionRespond extends Action
      * @param int $userId
      * @param int $clientId
      * @param int $doerId
+     * @param string $status
      * @return bool
      */
-    public function accessRightCheck(int $userId, int $clientId, int $doerId): bool
+    public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId == $doerId && $userId !== $clientId);
+        return ($userId === $doerId && $userId !== $clientId && $status === Task::STATUS_NEW);
     }
 }

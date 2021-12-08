@@ -5,10 +5,10 @@ namespace TaskForce\Actions;
 use TaskForce\Task;
 use TaskForce\Actions\Action;
 
-class ActionFinish extends Action
+class ActionCreate extends Action
 {
-    const ACTION_NAME = 'завершить';
-    const INNER_NAME = 'finish';
+    const ACTION_NAME = 'создать';
+    const INNER_NAME = 'create';
 
     /**
      * получает имя действия
@@ -16,7 +16,7 @@ class ActionFinish extends Action
      */
     public function getActionName(): string
     {
-        return self::ACTION_NAME;;
+        return self::ACTION_NAME;
     }
 
     /**
@@ -38,6 +38,6 @@ class ActionFinish extends Action
      */
     public function accessRightCheck(int $userId, int $clientId, int $doerId, string $status): bool
     {
-        return ($userId === $clientId && $userId !== $doerId && $status === Task::STATUS_WORKING);
+        return ($userId === $clientId && $userId !== $doerId && $status == null);
     }
 }
