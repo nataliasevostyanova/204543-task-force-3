@@ -6,8 +6,6 @@
 
 namespace TaskForce;
 
-use Taskforce\Actions\Action;
-use TaskForce\Actions\ActionCreate;
 use TaskForce\Actions\ActionCancel;
 use TaskForce\Actions\ActionRespond;
 use TaskForce\Actions\ActionFinish;
@@ -39,6 +37,16 @@ class Task
     const ACTION_REFUSE = 'refuse';
     const ACTION_FINISH = 'finish';
 
+
+    public function __construct(int $userId, int $clientId, int $doerId, string $status)
+    {
+        $this->userId = $userId;
+        $this->clientId = $clientId;
+        $this->doerId = $doerId;
+        $this->validateStatus($status);
+        $this->status = $status;
+    }
+
     /**
      * возвращает все возможные состояния задания
      * @return array $status
@@ -53,29 +61,18 @@ class Task
             self::STATUS_FINISH => 'завершено',
         ];
     }
-
     /**
      * проверяет валидность статуса
      * @param string $status
      * @return void
      * @throws WrongStatusException
      */
-    public function validateStatus (string $status) : void
+    private function validateStatus (string $status) : void
     {
         if (!array_key_exists($status, $this->getStatus())) {
             throw new WrongStatusException("Неправильное значение статуса задания");
         }
     }
-
-    public function __construct(int $userId, int $clientId, int $doerId, string $status)
-    {
-        $this->userId = $userId;
-        $this->clientId = $clientId;
-        $this->doerId = $doerId;
-        $this->validateStatus($status);
-        $this->status = $status;
-    }
-
 
     /**
      * возвращает все допустимые действия с заданием
@@ -92,15 +89,13 @@ class Task
         ];
     }
 
-
-
     /**
      * проверяет допустимость действия
      * @param string $action
      * @return void
      * @throws WrongActionException
      */
-    public function validateAction (string $action) : void
+    private function validateAction (string $action) : void
     {
         if (!array_key_exists($action, $this->getAction())) {
             throw new WrongActionException("Нет такого действия с заданием");
@@ -134,24 +129,17 @@ class Task
 
     /**
      * метод определяет допустимые действия для пользователя в каждом из состояний задания
-     * @param int $userId
-     * @param int $clientId
-     * @param int $doerId
-     * @param string $status
-     * @throws WrongStatusException
      * @return array
      */
-    public function getAllowedAction(int $userId, int $clientId, int $doerId, string $status) : array
+    public function getAllowedAction() : array
     {
-        $this->validateStatus($status);
-
         $actions = [new ActionCancel(), new ActionRespond(), new ActionFinish(), new ActionRefuse];
 
         $allowedAction = [];
 
         foreach ($actions as $action)
         {
-            if ($action->accessRightCheck($userId, $clientId, $doerId, $status)){
+            if ($action->accessRightCheck()){
                 $allowedAction[] = $action->getInnerName();
             }
         }
