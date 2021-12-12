@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'id категории',
   `name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название категории',
+  `icon` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название на английском',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -236,3 +237,20 @@ CREATE TABLE `user_category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='таблица связи';
 
 
+
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Курьерские услуги', 'delivary');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Уборка', 'clean');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Переезды', 'cargo');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Компьютерная помощь', 'neo');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Ремонт квартирный', 'flat');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Ремонт техники', 'repair');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Красота', 'beauty');
+INSERT INTO `category` (`name`, `icon`)
+VALUES ('Фото', 'photo');
