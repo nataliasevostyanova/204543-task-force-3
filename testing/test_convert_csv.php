@@ -29,10 +29,5 @@ echo '<pre>';
 var_dump($convert->writeQuery('../data/db_taskforce.sql', '../data/csv/categories.csv', 'category'));
 echo '</pre>';
 
-/*
-$db = new DBConnection();
 
-echo '<pre>';
-var_dump($db->query('../data/csv/categories.csv', 'category', '../data/db_taskforce.sql'));
-echo '</pre>';*/
 
