@@ -96,33 +96,37 @@ class ConvertCSV
         $this->columns = $this->getHeadersCSV($this->filename);
         $this->values = $this->getDataCSV($this->filename);
 
-// примерчик
-        //$colNames === $columns
-        //$dataVals === $values
 
         $dataToInsert = [];
 
-        foreach ($this->values as $row => $data) {
-            foreach($data as $val) {
-                $dataToInsert[] = $val;
-            }
-
+        for($i = 0, $size = count($this->values); $i < $size; ++$i) {
+            $people[$i]['salt'] = mt_rand(000000, 999999);
         }
-        return $dataToInsert; //возвращает одномерный массив данных для values;
+
+        for($i = 1, $size = count($this->values); $i < $size; ++$i) {
+            $dataToInsert[] = array_combine($this->columns, $this->values[$i]);
+        }
+
+
+        return $dataToInsert; // для конструкции for
     }
-    /*public function myCombinedArray() : ?iterable
+
+    /**
+     * преобразуетдвумерный массив $values в одномерный
+     * @return bool|array
+     */
+
+    public function  getValuesArray() : bool|array
     {
-        $this->columns = $this->getHeadersCSV($this->filename);
         $this->values = $this->getDataCSV($this->filename);
+        $valuesToInsert =[];
 
-        foreach($this->values as $this->columns => $value) {
-            yield $this->columns => $value;
+        foreach ($this->values as $row => $data) {
+           foreach($data as $val) {
+              $valuesToInsert[] = $val;
+            }
         }
-    }*/
-
-
-    /*public function  getValuesArray() : bool|array
-    {
-    }*/
+        return array_filter($valuesToInsert); // одномерный массив данных для values;
+    }
 
 }
