@@ -1,9 +1,10 @@
 <?php
 
-namespace TaskForce\Convertation;
+namespace TaskForce;
 
 use PDO;
 use TaskForce\Convertation\ConvertCSVtoSQL;
+use TaskForce\Convertation\ConvertCSV;
 
 class DBConnection
 {
@@ -13,7 +14,7 @@ class DBConnection
     private string $dbname = 'db_taskforce';
     private string $charset = 'utf8';
 
-    private object $db;
+    private object $pdo;
     private string $sqlTableName;
 
     /** Соединение с БД
@@ -22,39 +23,39 @@ class DBConnection
      * @param string $password
      * @param string $dbname
      * @param string $charset
-     * @return bool
+     * @return object|null
      */
-    public function connectDB(string $host, string $username, string $password, string $dbname, $charset) : bool
+    public function connectDB(string $host, string $username, string $password, string $dbname, string $charset) : ?object
     {
-        $dsn = "mysql:host=$host; dbname=$db; charset=$charset";
+        $dsn = "mysql:host=$host; dbname=$dbname; charset=$charset";
         $opt = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   = true,
+        PDO::ATTR_EMULATE_PREPARES => true,
         ];
-        $pdo = new PDO($dsn, $username, $password, $opt);
+
+        $this->pdo = new PDO($dsn, $username, $password, $opt);
+
+        return $this->pdo;
     }
 
-    /** Соединение с БД
-     *
-     */
 
 
 
     // Операции c БД
-    public function query(string $filename, string $sqlTableName, string $dumpDB)
+    /*public function query(string $filename, string $sqlTableName, string $dumpDB)
     {
         $data = new ConvertCSVtoSQL(string $filename, string $sqlTableName, string $dumpDB)
 
         $insert_id = [];
 
         foreach($data->createSQLQuery($filename, $sqlTableName) as $values) {
-            $query = $this->db->quote($values);
+
             $this->db->exec($query);
-            $insert_id[] = $db->lastInsertId();
+            $insert_id[] = $this->db->lastInsertId();
         }
         return $insert_id;
-    }
+    }*/
 
 }
 

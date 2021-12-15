@@ -5,6 +5,7 @@
 namespace TaskForce\Convertation;
 
 use \SplFileObject;
+use \SplFileInfo;
 use TaskForce\Exceptions\FileExistException;
 use TaskForce\Exceptions\FileOpenException;
 
@@ -14,8 +15,9 @@ class ConvertCSVtoSQL
     private string $sqlTableName;   // имя sql-файла, куда нужно импортировать данные csv-файла
     private string $columns;        // массив имен столбцов/полей файла csv
     private array $values;          // массив данных полей файла csv
-    private object $fileobject;     // объект класса SplFileObject
+    private object $fObject;     // объект класса SplFileObject
     private string $dumpDB;         // путь к sql-файлу базы данных
+
 
     public function __construct(string $filename, string $sqlTableName, string $dumpDB)
     {
@@ -23,7 +25,6 @@ class ConvertCSVtoSQL
         $this->sqlTableName = $sqlTableName;
         $this->dumpDB = $dumpDB;
     }
-
     /**
      * Функция для проверки существования файла и возможности его открыть для чтения
      * @param string $filePath
@@ -31,14 +32,14 @@ class ConvertCSVtoSQL
      * @throws FileExistException
      * @throws FileOpenException
      */
-    private function validCSV(string $filename): void
+    private function validCSV(string $fObject): void
     {
-       $this->fileobject = new SplFileObject($filename);
+       $this->fObject = new SplFileObject($this->filename, $this->sqlTableName, $this->dumpDB);
 
        if (!file_exists($this->filename)) {
             throw new FileExistException('Файл не найден в данной директории'); // exception needs try-catch in test
         }
-        $this->fileobject = new SplFileObject($this->filename);
+        $this->fObject = new SplFileObject($this->filename, $this->sqlTableName, $this->dumpDB);
 
         $this->fp = fopen($this->filename, "rb");
 
@@ -54,10 +55,10 @@ class ConvertCSVtoSQL
      */
     public function getHeadersCSV(string $filename) : string
     {
-        $this->fileobject = new SplFileObject($this->filename);
+        $this->fObject = new SplFileObject($this->filename, $this->sqlTableName, $this->dumpDB);
 
-        $this->fileobject->rewind();
-        $this->columns = implode('`, `', $this->fileobject->fgetcsv());
+        $this->fObject->rewind();
+        $this->columns = implode('`, `', $this->fObject->fgetcsv());
 
         return $this->columns;
     }
@@ -69,12 +70,12 @@ class ConvertCSVtoSQL
      */
     public function getCSVData(string $filename) : array
     {
-        $this->fileobject = new SplFileObject($this->filename);
+        $this->fObject = new SplFileObject($this->filename, $this->sqlTableName, $this->dumpDB);
+
         $result = [];
 
-        while (!$this->fileobject->eof()) {
-
-            $result[] = implode("', '", $this->fileobject->fgetcsv());
+        while (!$this->fObject->eof()) {
+            $result[] = implode("', '", $this->fObject->fgetcsv());
         }
         $values = array_filter($result);
         unset($values[0]);
@@ -82,7 +83,7 @@ class ConvertCSVtoSQL
     }
 
     /**
-    * готовит sql-запросы на добавление данных из файда *.csv в sql-таблицу
+    * готовит sql-запросы на добавление данных из файла *.csv в sql-таблицу
     * @param string $filename
     * @param string $sqlTableName
     * @return string
@@ -100,16 +101,16 @@ class ConvertCSVtoSQL
     }
 
     /**
-     * записывает ыйд-запросы на добавление данных в файл базы данных
+     * записывает sql-запросы на добавление данных в файл базы данных
      * @param string $dumpDB
      * @param string $sqlTableName
      * @return
      */
 
-    public function writeQuery(string $dumpDB, string $sqlTableName)
+  /*  public function writeQuery(string $dumpDB, string $sqlTableName)
     {
         file_put_contents($this->dumpDB, $this->createSQLQuery($this->dumpDB, $this->sqlTableName), FILE_APPEND);
-    }
+    }*/
 }
 
 
