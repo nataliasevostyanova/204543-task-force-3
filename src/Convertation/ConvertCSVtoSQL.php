@@ -12,17 +12,18 @@ use TaskForce\Exceptions\FileOpenException;
 
 class ConvertCSVtoSQL
 {
-    private string $filename;       // путь к csv-файлу
-    private string $sqlTableName;   // имя sql-файла, куда нужно импортировать данные csv-файла
-    private string|array $columns;  // массив/строка имен столбцов/полей файла csv
-    private array $values;          // массив данных полей файла csv
-    private object $fileobject;     // объект класса SplFileObject
-    private string $dumpDB; // путь к sql-файлу базы данных
+    private nullable|string|null $filename = null;       // путь к csv-файлу
+    private nullable|string|null $sqlTableName = null;   // имя sql-таблицы, куда нужно импортировать данные csv-файла
+    private nullable|array|string|null $columns = null;  // массив/строка имен столбцов/полей файла csv
+    private nullable|array|null $values = null;          // массив данных полей файла csv
+    private nullable|string|null$targetSql;              // имя файла sql для записи запроса
+    private object $fileobject;                          // объект класса SplFileObject
 
     public function __construct(string $filename, string $sqlTableName)
     {
         $this->filename = $filename;
         $this->sqlTableName = $sqlTableName;
+
     }
 
     /**
@@ -73,7 +74,7 @@ class ConvertCSVtoSQL
     }
 
     /**
-     * получает массив данных из файла *.csv для заполнения строк в sql-таблице
+     * получает массив строк данных из файла *.csv
      * @param string $filename
      * @return array
      */
@@ -83,61 +84,65 @@ class ConvertCSVtoSQL
         $result = [];
 
         while (!$this->fileobject->eof()) {
-
-            $result[] = implode("', '", $this->fileobject->fgetcsv());
+            $result[] = "'". implode("', '", $this->fileobject->fgetcsv()). "'";
         }
         $values = array_filter($result);
         unset($values[0]);
         return $values;
     }
 
-        /**
-         * готовит sql-запросы на добавление данных из файда *.csv в sql-таблицу
-         * createSQLQuery == getQueryToDump
-         * @param string $filename
-         * @param string $sqlTableName
-         * @return string
-         */
-        public function getQueryToDump(string $filename, string $sqlTableName) : string
+    /**
+     * "Запись в sql-файл"
+     * готовит sql-запросы на добавление данных из файла *.csv в sql-файл
+     * @param string $filename
+     * @param string $sqlTableName
+     * @return string
+     */
+    public function getQueryToFile(string $filename, string $sqlTableName) : string
+    {
+        $sqlLine = [];
+        $this->columns = $this->getHeadersLine($this->filename);
+        $this->values = $this->getCSVData($this->filename);
+
+        foreach ($this->getCSVData($filename) as $values)
         {
-            $this->filename =  '../data/csv/categories.csv';
-            $sqlLine = [];
-            $this->columns = $this->getHeadersLine($this->filename);
-            $this->values = $this->getCSVData($this->filename);
-
-            foreach ($this->getCSVData($filename) as $values)
-            {
-                $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->columns ."\r\n"."VALUES ('" . $values . "');". "\r\n";
-            }
-        // вариант с подготовленным выражением
-        //insert into table (fielda, fieldb, ... ) values (?,?...), (?,?...);
-
+            $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->columns ."\r\n"."VALUES (" . $values . ");". "\r\n";
+        }
         return implode($sqlLine);
     }
 
-    public function getPrepQuery(string $filename) : string
+    /**
+     * готовит sql-запросы для подготовленного выражения с плейсхолдерами
+     * @param string $filename
+     * @param string $sqlTableName
+     * @return string
+     */
+    public function getPrepQuery(string $filename, string $sqlTableName) : string
     {
-        //$this->columns = $this->getHeadersLine($this->filename);
         $count = count($this->getHeadersCSV($this->filename));
         $questions = str_repeat("?,", $count);
-        //substr("abcdef", 0, -1);
         $questions = substr($questions, 0, -1);
 
         $sqlLine = "INSERT INTO `" . $this->sqlTableName . "` " . $this->getHeadersLine($this->filename) . " VALUES (" . $questions . ")";
         return $sqlLine;
     }
 
+
     /**
-     * записывает sql-запросы на добавление данных в файл базы данных
-     * @param string $dumpDB
+     * записывает sql-запросы на добавление данных в sql-файл
+     * @param string $filename
+     * @param string $targetSql
      * @param string $sqlTableName
-     * @return int
+     * @return void
      */
-    public function writeQuery(string $dumpDB, string $sqlTableName) : int
+    public function writeQuery(string $filename, string $targetSql, string $sqlTableName) : void
     {
-        $this->dumpDB = '../data/db_taskforce.sql';
-        $this->sqlTableName = 'category';
-        file_put_contents($this->dumpDB, $this->getQueryToDump($this->dumpDB, $this->sqlTableName), FILE_APPEND | LOCK_EX);
+        $this->fileobject = new SplFileObject($this->filename, $this->sqlTableName);
+        $this->targetSql = $targetSql;
+        $sqlfile = fopen($this->targetSql, 'w');
+        $sql = $this->getQueryToFile($this->filename, $this->sqlTableName);
+        fwrite($sqlfile, $sql);
+        fclose($this->targetSql);
     }
 }
 

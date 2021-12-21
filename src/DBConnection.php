@@ -4,8 +4,10 @@ namespace TaskForce;
 
 use PDO;
 use TaskForce\Convertation\ConvertCSVtoSQL;
-use TaskForce\Convertation\ConvertCSV;
 
+/**
+ * класс для соединения с базой данных  и обработки sql-запроса
+ */
 class DBConnection
 {
     private string $host = 'localhost';
@@ -14,9 +16,16 @@ class DBConnection
     private string $dbname = 'db_taskforce';
     private string $charset = 'utf8mb4';
 
-    private object $db;
-    private string $sqlTableName;
-    private string $filename;
+    private object $pdo;
+    private nullable|string|null $filename = null;
+    private nullable|string|null $sqlTableName = null;
+
+    public function __construct(string $filename, string $sqlTableName)
+    {
+        $this->filename = $filename;
+        $this->sqlTableName = $sqlTableName;
+    }
+
 
     /** Соединение с БД
      * @param string $host
@@ -35,46 +44,30 @@ class DBConnection
             PDO::ATTR_EMULATE_PREPARES => true,
         ];
 
-        $this->db = new PDO($dsn, $username, $password, $opt);
+        $this->pdo = new PDO($dsn, $username, $password, $opt);
 
-        return $this->db;
+        return $this->pdo;
     }
+
     /**
      * формирование запроса
      *
      */
-    public function getQuery(string $filename, string $sqlTableName) : string|array
-    {
-        $this->filename = '../data/csv/categories.csv';
-        $this->sqlTableName = 'category';
-
-        $conv = new ConvertCSVtoSQL($this->filename, $this->sqlTableName);
-
-        $sql = $conv->getPrepQuery($this->filename, $this->sqlTableName);
-
-        $lineToInsert = explode(';', $sql);
-        return $lineToInsert;
-    }
-
     public function execQuery(string $filename, string $sqlTableName)
     {
-        $this->filename = '../data/csv/categories.csv';
-        $this->sqlTableName = 'category';
-        $lines = $this->getQuery($this->filename, $this->sqlTableName);
-        $rowInsert = [];
+        $convert = new ConvertCSVtoSQL($filename, $sqlTableName);
+        $rowInsert = $convert->getPrepQuery($this->filename, $this->sqlTableName);
 
-        foreach ($lines as $key => $line) {
-            $rowInsert[] = $lines;
-        }
-          // запрос долже быть подготовленным!!!! иначе prepare() применять нельзя
-        if (!empty($lines)) {
-            throw new \PDOException("'Запрос к таблице ' . $this->sqlTableName . 'пуст'");
-        }
         $stmt = $this->pdo->prepare($rowInsert);
-        $stmt = $pdo->execute();
+        $csvData =  $convert->getCSVData($this->filename) ;
+
+        foreach ($csvData as $key => $data) {
+           $stmt = $this->pdo->exec($data);
+        }
+
+
     }
 
-    // Операции c БД
 
 
 }
