@@ -15,48 +15,46 @@ class ConvertCSVtoSQL
     private nullable|string|null $filename = null;       // путь к csv-файлу
     private nullable|string|null $sqlTableName = null;   // имя sql-таблицы, куда нужно импортировать данные csv-файла
     private nullable|array|string|null $columns = null;  // массив/строка имен столбцов/полей файла csv
-    private nullable|array|null $values = null;          // массив данных полей файла csv
-    private nullable|string|null$targetSql;              // имя файла sql для записи запроса
+   //private nullable|array|null $values = null;          // массив данных полей файла csv
+    public string $targetSql = '../data/insert_db.sql';  // имя файла sql для записи запроса
     private object $fileobject;                          // объект класса SplFileObject
 
     public function __construct(string $filename, string $sqlTableName)
     {
         $this->filename = $filename;
         $this->sqlTableName = $sqlTableName;
-
+        $this->validCSV($filename);
+        $this->fileobject = new SplFileObject($this->filename);
+        $this->fileobject->setCsvControl($separator = ",", $enclosure = "\"",
+        $escape = "\\");
     }
 
     /**
      * Функция для проверки существования файла и возможности его открыть для чтения
-     * @param string $filePath
+     * @param string $filename
      * @return void
      * @throws FileExistException
      * @throws FileOpenException
      */
     private function validCSV(string $filename): void
     {
-        $this->fileobject = new SplFileObject($filename);
+       if (!file_exists($this->filename)) {
+            throw new FileExistException('Файл не найден в данной директории');
+       }
+       if (!fopen($this->filename, "rb")) {
+           throw new FileOpenException('Не удалось открыть файл для чтения');
+       }
 
-        if (!file_exists($this->filename)) {
-            throw new FileExistException('Файл не найден в данной директории'); // exception needs try-catch in test
-        }
-        $this->fileobject = new SplFileObject($this->filename);
-
-        $this->fp = fopen($this->filename, "rb");
-
-        if (!$this->fp) {
-            throw new FileOpenException('Не удалось открыть файл для чтения'); // exception needs try-catch in test
-        }
     }
 
     /**
      * получает имена столбцов в виде одномерного массива
      * @param string $filename
      * @return array
+     *
      */
     public function getHeadersCSV(string $filename) : array
     {
-        $this->fileobject = new SplFileObject($this->filename);
         $this->fileobject->rewind();
         $this->columns = $this->fileobject->fgetcsv();
         return $this->columns;
@@ -69,7 +67,7 @@ class ConvertCSVtoSQL
      */
     public function getHeadersLine(string $filename) : string
     {
-        $columnsLine = " (`". implode("`, `", $this->getHeadersCSV($this->filename)) . "`) ";
+        $columnsLine = " (`". implode("`, `", $this->getHeadersCSV($this->fileobject)) . "`) ";
         return $columnsLine;
     }
 
@@ -80,15 +78,12 @@ class ConvertCSVtoSQL
      */
     public function getCSVData(string $filename) : array
     {
-        $this->fileobject = new SplFileObject($this->filename);
-        $result = [];
-
+        $values = [];
         while (!$this->fileobject->eof()) {
-            $result[] = "'". implode("', '", $this->fileobject->fgetcsv()). "'";
+            $values[] = implode("','", $this->fileobject->fgetcsv( ));
         }
-        $values = array_filter($result);
-        unset($values[0]);
-        return $values;
+        $values = array_filter($values, function($a) {return $a !== "";});
+        return  $values;
     }
 
     /**
@@ -101,14 +96,15 @@ class ConvertCSVtoSQL
     public function getQueryToFile(string $filename, string $sqlTableName) : string
     {
         $sqlLine = [];
-        $this->columns = $this->getHeadersLine($this->filename);
-        $this->values = $this->getCSVData($this->filename);
+        //$this->columns = $this->getHeadersLine($this->filename);
+        $values = $this->getCSVData($this->filename);
 
-        foreach ($this->getCSVData($filename) as $values)
-        {
-            $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->columns ."\r\n"."VALUES (" . $values . ");". "\r\n";
+        foreach ($values as $key => $value) {
+
+                $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" .
+                    "(`name`, `icon`)" ."\r\n"."VALUES ('" .$value. "');". "\r\n";
         }
-        return implode($sqlLine);
+        return implode(" ", $sqlLine);
     }
 
     /**
@@ -131,18 +127,13 @@ class ConvertCSVtoSQL
     /**
      * записывает sql-запросы на добавление данных в sql-файл
      * @param string $filename
-     * @param string $targetSql
      * @param string $sqlTableName
+     * @param string $targetSql
      * @return void
      */
-    public function writeQuery(string $filename, string $targetSql, string $sqlTableName) : void
+    public function writeQuery(string $filename, string $sqlTableName, string $targetSql) : void
     {
-        $this->fileobject = new SplFileObject($this->filename, $this->sqlTableName);
-        $this->targetSql = $targetSql;
-        $sqlfile = fopen($this->targetSql, 'w');
-        $sql = $this->getQueryToFile($this->filename, $this->sqlTableName);
-        fwrite($sqlfile, $sql);
-        fclose($this->targetSql);
+        file_put_contents($this->targetSql, $this->getQueryToFile($this->targetSql, $this->sqlTableName));
     }
 }
 
