@@ -5,7 +5,7 @@ namespace TaskForce\Exceptions;
 /**
  * Класс-исключение проверяет можно ли открыть файл для чтения
  */
-class FileOpenException extends \Exception
+class FileOpenException extends Exception
 {
     /**
      * @param string $message является обязательным

@@ -5,7 +5,7 @@ namespace TaskForce\Exceptions;
 /**
  * Класс-исключение для проверки существования файла в заданной директории
  */
-class FileExistException extends \Exception
+class FileExistException extends Exception
 {
     /**
      * @param string $message является обязательным
