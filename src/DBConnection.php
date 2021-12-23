@@ -17,6 +17,8 @@ class DBConnection
     private string $charset = 'utf8mb4';
 
     private object $pdo;
+    private object $convert;
+
     private nullable|string|null $filename = null;
     private nullable|string|null $sqlTableName = null;
 
@@ -50,25 +52,38 @@ class DBConnection
     }
 
     /**
-     * формирование запроса
-     *
+     * преобразование строки запросов в массив
      */
+    public function getLinesToInsert() : array
+    {
+        $linesInsert;
+        $convert = new ConvertCSVtoSQL($this->filename, $this->sqlTableName);
+        $linesInsert = explode(";", $convert->getQueryToFile($this->filename, $this->sqlTableName));
+        return $linesInsert;
+    }
     public function execQuery(string $filename, string $sqlTableName)
     {
-        $convert = new ConvertCSVtoSQL($filename, $sqlTableName);
-        $rowInsert = $convert->getPrepQuery($this->filename, $this->sqlTableName);
+        $lineInsert = $this->getLinesToInsert();
 
-        $stmt = $this->pdo->prepare($rowInsert);
-        $csvData =  $convert->getCSVData($this->filename) ;
-
-        foreach ($csvData as $key => $data) {
-           $stmt = $this->pdo->exec($data);
+        foreach ($lineInsert as $item) {
+            $stmt = $this->pdo->quote($item);
+            $this->pdo->exec($stmt);
         }
-
-
     }
 
+        /**
+         * вариант для  подготовленного запроса
+         * пока не работает..((
+         */
+    public function execPrepQuery(string $filename, string $sqlTableName)
+    {
+        $lineInsert = $convert->getPrepQuery($this->filename, $this->sqlTableName);
+        $stmt = $this->pdo->prepare($lineInsert);
+        $csvData = $convert->getCSVData($this->filename);
 
-
+        foreach ($csvData as $key => $data) {
+            $stmt = $this->pdo->exec($data);
+        }
+    }
 }
 
