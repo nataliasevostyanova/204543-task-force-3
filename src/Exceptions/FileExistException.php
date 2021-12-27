@@ -2,6 +2,7 @@
 
 namespace TaskForce\Exceptions;
 
+use Exception;
 /**
  * Класс-исключение для проверки существования файла в заданной директории
  */

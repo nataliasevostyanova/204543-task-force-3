@@ -12,11 +12,11 @@ use TaskForce\Exceptions\FileOpenException;
 
 class ConvertCSVtoSQL
 {
-    private nullable|string|null $filename = null;       // путь к csv-файлу
-    private nullable|string|null $sqlTableName = null;   // имя sql-таблицы, куда нужно импортировать данные csv-файла
-    private nullable|array|string|null $columns = null;  // массив/строка имен столбцов/полей файла csv
-   //private nullable|array|null $values = null;          // массив данных полей файла csv
-    public string $targetSql = '../data/insert_db.sql';  // имя файла sql для записи запроса
+    private string $filename;       // путь к csv-файлу
+    private string $sqlTableName;   // имя sql-таблицы, куда нужно импортировать данные csv-файла
+    //private array|string|null $columns = null;  // массив/строка имен столбцов/полей файла csv
+    private array|null $values = null;          // массив данных полей файла csv
+    public string $targetSql;// = '../data/insert_db.sql' имя файла sql для записи запроса
     private object $fileobject;                          // объект класса SplFileObject
 
     public function __construct(string $filename, string $sqlTableName)
@@ -25,8 +25,7 @@ class ConvertCSVtoSQL
         $this->sqlTableName = $sqlTableName;
         $this->validCSV($filename);
         $this->fileobject = new SplFileObject($this->filename);
-        $this->fileobject->setCsvControl($separator = ",", $enclosure = "\"",
-        $escape = "\\");
+        $this->fileobject->setCsvControl($separator = ",", $enclosure = "\"", $escape = "\\");
     }
 
     /**
@@ -55,9 +54,11 @@ class ConvertCSVtoSQL
      */
     public function getHeadersCSV(string $filename) : array
     {
+        $this->fileobject = new SplFileObject($this->filename);
+        //$columns = null;
         $this->fileobject->rewind();
-        $this->columns = $this->fileobject->fgetcsv();
-        return $this->columns;
+        return $this->fileobject->fgetcsv();
+       // return $columns;
     }
 
     /**
@@ -67,8 +68,8 @@ class ConvertCSVtoSQL
      */
     public function getHeadersLine(string $filename) : string
     {
-        $columnsLine = " (`". implode("`, `", $this->getHeadersCSV($this->fileobject)) . "`) ";
-        return $columnsLine;
+        return " (`". implode("`, `", $this->getHeadersCSV($this->fileobject)) . "`) ";
+        //return $columnsLine;
     }
 
     /**
@@ -93,16 +94,15 @@ class ConvertCSVtoSQL
      * @param string $sqlTableName
      * @return string
      */
-    public function getQueryToFile(string $filename, string $sqlTableName) : string
+    public function getQueryToFile(string $sqlTableName) : string
     {
         $sqlLine = [];
-        //$this->columns = $this->getHeadersLine($this->filename);
         $values = $this->getCSVData($this->filename);
 
-        foreach ($values as $key => $value) {
+        foreach ($values as $value) {
 
-                $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" .
-                    "(`name`, `icon`)" ."\r\n"."VALUES ('" .$value. "');". "\r\n";
+           $sqlLine[] = "INSERT INTO `" . $sqlTableName . "`" .
+               $this->getHeadersLine() ."\r\n"."VALUES ('" . $value . "');". "\r\n";
         }
         return implode(" ", $sqlLine);
     }
@@ -131,9 +131,17 @@ class ConvertCSVtoSQL
      * @param string $targetSql
      * @return void
      */
-    public function writeQuery(string $filename, string $sqlTableName, string $targetSql) : void
+    /*public function writeQuery(string $filename, string $sqlTableName, string $targetSql) : void
     {
         file_put_contents($this->targetSql, $this->getQueryToFile($this->targetSql, $this->sqlTableName));
+    }*/
+
+    public function writeQuery(string $filename, string $sqlTableName, string $targetSql) : void
+    {
+        $targetSql = '../data/sql/opinions.sql';
+        $sqlFile = fopen($targetSql, 'w') or die("Невозможно открыть файл");
+        $sql = $this->getQueryToFile($this->filename, $this->sqlTableName);
+        fwrite($sqlFile, $sql);
     }
 }
 

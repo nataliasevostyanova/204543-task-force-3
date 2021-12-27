@@ -2,6 +2,7 @@
 
 namespace TaskForce\Exceptions;
 
+use Exception;
 /**
  * Класс-исключение проверяет можно ли открыть файл для чтения
  */

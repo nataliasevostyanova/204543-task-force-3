@@ -6,7 +6,7 @@ use TaskForce\Convertation\FileList;
 use TaskForce\Convertation\ConvertCSVtoSQL;
 use TaskForce\DBConnection;
 
-$convert = new ConvertCSVtoSQL('../data/csv/categories.csv', 'category');
+$convert = new ConvertCSVtoSQL('../data/csv/categories.csv', 'categories');
 
 echo 'getHeadersCSV:';
 echo '<pre>';
@@ -25,17 +25,11 @@ echo '</pre>';
 
 echo 'sql-запрос для записи в файл:';
 echo '<pre>';
-var_dump($convert->getQueryToFile('../data/csv/cities.csv','category'));
-echo '</pre>';
-
-
-echo 'sql-запрос для подготовленного выражения:';
-echo '<pre>';
-var_dump($convert->getPrepQuery('../data/csv/categories.csv','category'));
+var_dump($convert->getQueryToFile('../data/csv/categories.csv','categories'));
 echo '</pre>';
 
 echo '<pre>';
-var_dump($convert->writeQuery('../data/csv/categories.csv','category', 'insert_db.sql'));
+var_dump($convert->writeQuery('../data/csv/categories.csv','categories', 'categories.sql'));
 echo '</pre>';
 /*
 
@@ -48,25 +42,8 @@ echo '</pre>';
 */
 
 
-/**
- * класс DB_Connection соединение с базой и выполнение запроса
- *
- */
-$link = new DBConnection('../data/csv/categories.csv','category');
 
-echo 'DBConnection - соединение с базой';
-echo '<pre>';
-var_dump($link->connectDB('localhost', 'natasha', 'natasha', 'db_taskforce', 'utf-8' ));
-echo '</pre>';
 
-echo '<pre>';
-var_dump($link->getLinesToInsert());
-echo '</pre>';
-
-echo 'DBConnection - выполнение запроса';
-echo '<pre>';
-var_dump($link->execQuery('../data/csv/categories.csv', 'category'));
-echo '</pre>';
 
 
 
