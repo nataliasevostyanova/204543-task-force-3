@@ -19,30 +19,30 @@ echo '</pre>';
 /**
  * Проверка класса Converter
  */
-$convert = new Converter('../data/csv/replies.csv', 'replies', '../data/sql/replies.sql');
+$convert = new Converter('../data/csv/tasks.csv', 'tasks', '../data/sql/tasks.sql');
 
 echo 'getHeadersCSV:';
 echo '<pre>';
-var_dump($convert->getHeadersCSV('../data/csv/replies.csv'));
+var_dump($convert->getHeadersCSV('../data/csv/tasks.csv'));
 echo '</pre>';
 
 echo 'getHeadersLine:';
 echo '<pre>';
-var_dump($convert->getHeadersLine('../data/csv/replies.csv'));
+var_dump($convert->getHeadersLine('../data/csv/tasks.csv'));
 echo '</pre>';
 
 echo 'getCSVData():';
 echo '<pre>';
-var_dump($convert->getCSVData('../data/csv/replies.csv'));
+var_dump($convert->getCSVData('../data/csv/tasks.csv'));
 echo '</pre>';
 
 echo 'sql-запрос для записи в файл:';
 echo '<pre>';
-var_dump($convert->getQueryToFile('../data/csv/replies.csv','replies'));
+var_dump($convert->getQueryToFile('../data/csv/tasks.csv','tasks'));
 echo '</pre>';
 
 echo '<pre>';
-var_dump($convert->writeQuery('../data/csv/replies.csv', 'replies', '../data/sql/replies.sql'));
+var_dump($convert->writeQuery('../data/csv/tasks.csv', 'tasks', '../data/sql/tasks.sql'));
 echo '</pre>';
 
 

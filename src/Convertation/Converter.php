@@ -116,7 +116,7 @@ class Converter
      */
     public function writeQuery(string $csvPath, string $sqlTableName, string $targetSql): void
     {
-        $this->fileobject = new SplFileObject($this->csvPath, $this->sqlTableName, $this->targetSql);
+        //$this->fileobject = new SplFileObject($this->csvPath, $this->sqlTableName, $this->targetSql);
         $sqlfile = fopen($this->targetSql, 'w+');
         $sql = $this->getQueryToFile($this->csvPath, $this->sqlTableName);
         fwrite($sqlfile, $sql);
