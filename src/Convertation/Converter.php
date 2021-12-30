@@ -83,7 +83,7 @@ class Converter
         $result = [];
 
         while (!$this->fileobject->eof()) {
-            $result[] =  implode("', '", $this->fileobject->fgetcsv());
+            $result[] =  implode("\', \'", $this->fileobject->fgetcsv());
         }
         $values = array_filter($result, function($a) {return $a !== "";});
         unset($values[0]);
@@ -102,7 +102,7 @@ class Converter
         $sqlLine = [];
 
         foreach ($this->getCSVData($csvPath) as $values) {
-            $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->getHeadersLine($this->csvPath) . "\r\n" . "VALUES (". "'" . $values . "'". ");" . "\r\n";
+            $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->getHeadersLine($this->csvPath) . "\r\n" . "VALUES (". "\'" . $values . "\'". ");" . "\r\n";
         }
         return implode($sqlLine);
     }
