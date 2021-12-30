@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Структура таблицы `category`
 --
 
-CREATE TABLE `category` (
+CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'id категории',
   `name` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название категории',
   `icon` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название на английском',
@@ -38,7 +38,7 @@ CREATE TABLE `category` (
 -- Структура таблицы `town`
 --
 
-CREATE TABLE `town` (
+CREATE TABLE `cities` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'почтовый код города',
   `town` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'название города',
   PRIMARY KEY (`id`)
