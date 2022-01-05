@@ -13,7 +13,7 @@ use TaskForce\Exceptions\FileOpenException;
  */
 class Converter
 {
-    private string|null $csvPath;       // путь к csv-файлу
+    private string|null $csvPath;        // путь к csv-файлу
     private string|null $sqlTableName;   // имя sql-таблицы, куда нужно импортировать данные csv-файла
     private string $targetSql;           // имя файла sql для записи запроса
     private SplFileObject $fileobject;   // объект класса SplFileObject
@@ -29,7 +29,7 @@ class Converter
 
     /**
      * Функция для проверки существования файла и возможности его открыть для чтения
-     * @param string $filePath
+     * @param string $csvPath
      * @return void
      * @throws FileExistException
      * @throws FileOpenException
