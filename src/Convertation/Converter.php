@@ -69,7 +69,7 @@ class Converter
      */
     public function getHeadersLine(string $csvPath): string
     {
-        return " (`" . implode("`, `", $this->getHeadersCSV($this->csvPath)) . "`) ";
+        return ' (`' . implode('`, `', $this->getHeadersCSV($this->csvPath)) . '`) ';
     }
 
     /**
@@ -83,7 +83,7 @@ class Converter
         $result = [];
 
         while (!$this->fileobject->eof()) {
-            $result[] =  implode("\', \'", $this->fileobject->fgetcsv());
+            $result[] =  implode("','", $this->fileobject->fgetcsv());
         }
         $values = array_filter($result, function($a) {return $a !== "";});
         unset($values[0]);
@@ -102,7 +102,7 @@ class Converter
         $sqlLine = [];
 
         foreach ($this->getCSVData($csvPath) as $values) {
-            $sqlLine[] = "INSERT INTO `" . $this->sqlTableName . "`" . $this->getHeadersLine($this->csvPath) . "\r\n" . "VALUES (". "\'" . $values . "\'". ");" . "\r\n";
+            $sqlLine[] = 'INSERT INTO `' . $this->sqlTableName . '`' . $this->getHeadersLine($this->csvPath) . "\r\n" . 'VALUES (\''. $values . '\');' . "\r\n";
         }
         return implode($sqlLine);
     }
@@ -116,7 +116,6 @@ class Converter
      */
     public function writeQuery(string $csvPath, string $sqlTableName, string $targetSql): void
     {
-        //$this->fileobject = new SplFileObject($this->csvPath, $this->sqlTableName, $this->targetSql);
         $sqlfile = fopen($this->targetSql, 'w+');
         $sql = $this->getQueryToFile($this->csvPath, $this->sqlTableName);
         fwrite($sqlfile, $sql);
