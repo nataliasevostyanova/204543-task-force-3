@@ -19,30 +19,30 @@ echo '</pre>';
 /**
  * Проверка класса Converter
  */
-$convert = new Converter('../data/csv/replies.csv', 'replies', '../data/sql/replies.sql');
+$convert = new Converter('../data/csv/opninions.csv', 'opninions', '../data/sql/opninions.sql');
 
 echo 'getHeadersCSV:';
 echo '<pre>';
-var_dump($convert->getHeadersCSV('../data/csv/replies.csv'));
+var_dump($convert->getHeadersCSV('../data/csv/opninions.csv'));
 echo '</pre>';
 
 echo 'getHeadersLine:';
 echo '<pre>';
-var_dump($convert->getHeadersLine('../data/csv/replies.csv'));
+var_dump($convert->getHeadersLine('../data/csv/opninions.csv'));
 echo '</pre>';
 
 echo 'getCSVData():';
 echo '<pre>';
-var_dump($convert->getCSVData('../data/csv/replies.csv'));
+var_dump($convert->getCSVData('../data/csv/opninions.csv'));
 echo '</pre>';
 
 echo 'sql-запрос для записи в файл:';
 echo '<pre>';
-var_dump($convert->getQueryToFile('../data/csv/replies.csv','replies'));
+var_dump($convert->getQueryToFile('../data/csv/opninions.csv','opninions'));
 echo '</pre>';
 
 echo '<pre>';
-var_dump($convert->writeQuery('../data/csv/replies.csv', 'replies', '../data/sql/replies.sql'));
+var_dump($convert->writeQuery('../data/csv/opninions.csv', 'opninions', '../data/sql/opninions.sql'));
 echo '</pre>';
 
 

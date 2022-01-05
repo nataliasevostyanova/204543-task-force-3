@@ -83,7 +83,7 @@ class Converter
         $result = [];
 
         while (!$this->fileobject->eof()) {
-            $result[] =  implode("','", $this->fileobject->fgetcsv());
+            $result[] =  implode("\',\'", $this->fileobject->fgetcsv());
         }
         $values = array_filter($result, function($a) {return $a !== "";});
         unset($values[0]);
