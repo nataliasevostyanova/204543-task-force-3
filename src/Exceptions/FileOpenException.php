@@ -2,10 +2,11 @@
 
 namespace TaskForce\Exceptions;
 
+use Exception;
 /**
- * Класс-исключение для проверки допустимого статуса в задании Task
+ * Класс-исключение проверяет можно ли открыть файл для чтения
  */
-class WrongStatusException extends \Exception
+class FileOpenException extends Exception
 {
     /**
      * @param string $message является обязательным

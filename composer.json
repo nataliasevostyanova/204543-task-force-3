@@ -3,5 +3,8 @@
     "psr-4": {
       "TaskForce\\": "src/"
     }
+  },
+  "require": {
+    "ext-pdo": "*"
   }
 }
