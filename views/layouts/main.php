@@ -20,17 +20,18 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="stylesheet" href="../../../css/style.css">
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
 <header>
-    nav class="main-nav">
-    <a href='#' class="header-logo">
-        <img class="logo-image" src="img/logotype.png" width=227 height=60 alt="taskforce">
-    </a>
-    <div class="nav-wrapper">
+    <nav class="main-nav">
+        <a href='#' class="header-logo">
+            <img class="logo-image" src="../../../img/logotype.png" width=227 height=60 alt="taskforce">
+        </a>
+        <div class="nav-wrapper">
         <ul class="nav-list">
             <li class="list-item list-item--active">
                 <a class="link link--nav" >Новое</a>
@@ -46,10 +47,10 @@ AppAsset::register($this);
             </li>
         </ul>
     </div>
-    </nav>
-    <div class="user-block">
+
+        <div class="user-block">
         <a href="#">
-            <img class="user-photo" src="img/man-glasses.png" width="55" height="55" alt="Аватар">
+            <img class="user-photo" src="../../../img/man-glasses.png" width="55" height="55" alt="Аватар">
         </a>
         <div class="user-menu">
             <p class="user-name">Василий</p>
@@ -68,6 +69,7 @@ AppAsset::register($this);
             </div>
         </div>
     </div>
+    </nav>
  </header>
 
 <main role="main" class="flex-shrink-0">
@@ -76,9 +78,9 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-         </div>
+    </div>
     <div class="main-content">
-        <?= $content ?>
+        <?= $content; ?>
     </div>
 </main>
 
