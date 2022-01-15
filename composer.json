@@ -4,10 +4,6 @@
       "TaskForce\\": "src/"
     }
   },
-  "require": {
-    "ext-pdo": "*"
-  },
-
     "name": "yiisoft/yii2-app-basic",
     "description": "Yii 2 Basic Project Template",
     "keywords": ["yii2", "framework", "basic", "project template"],
@@ -26,7 +22,8 @@
         "php": ">=7.1.0",
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap4": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -38,8 +35,7 @@
         "symfony/browser-kit": ">=2.7 <=4.2.4",
         "codeception/module-filesystem": "^1.0.0",
         "codeception/module-yii2": "^1.0.0",
-        "codeception/module-asserts": "^1.0.0",
-        "phpunit/phpunit": "~5.7.27 || ~6.5.5"
+        "codeception/module-asserts": "^1.0.0"
     },
     "config": {
         "process-timeout": 1800,
