@@ -12,8 +12,7 @@ class TasksController extends \yii\web\Controller
     {
         $tasks = Task::find()
             ->with([ 'town', 'category'])
-            ->where(['task_status' => 'новое'])
-            ->andWhere(['>', 'finish_date', Carbon::now('+3:00')->toDateTimeString()])
+            ->where(['task_status' => 'new'])
             ->orderBy(['created_date' => SORT_DESC])
             ->all();
 

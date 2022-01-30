@@ -15,6 +15,6 @@ return [
     'category_id' => $faker->numberBetween(1,8),
     'budget' => $faker->numberBetween(300,10000),
     'finish_date' =>$faker->dateTimeBetween('2022-02-15', '2022-05-31')->format('Y-m-d'),
-    'task_status'=> $faker->randomElement($array = ['новое','отменено','в работе', 'провалено', 'завершено']),
+    'task_status'=> $faker->randomElement($array = ['new','undo','working', 'failed', 'finished']),
 
 ];
