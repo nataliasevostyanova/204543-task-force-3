@@ -13,7 +13,7 @@ use TaskForce\Actions\ActionRefuse;
 use TaskForce\Exceptions\WrongStatusException;
 use TaskForce\Exceptions\WrongActionException;
 
-class Task
+class TaskStatus
 {
     private int $userId;
     private int $clientId;

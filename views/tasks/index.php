@@ -2,31 +2,22 @@
 
     use yii\helpers\Html;
     use Carbon\Carbon;
+    use yii\widgets\ActiveForm;
+   use yii\widgets\ListView;
 
-    $this->title = 'TaskForce: Новые задания';
+
+$this->title = 'TaskForce: Новые задания';
 ?>
-
     <div class="left-column">
         <h3 class="head-main head-task">Новые задания</h3>
 
-        <?php foreach($tasks as $task): ?>
-            <div class="task-card">
-                <div class="header-task">
-                    <a  href="#" class="link link--block link--big"><?= Html::encode($task->title); ?></a>
-                    <p class="price price--task"><?= Html::encode($task->budget); ?></p>
-                </div>
-                <p class="info-text"><span class="current-time"><?= Carbon::parse($task->created_date)->locale('ru')
-                            ->diffForHumans(); ?></span></p>
-                <p class="task-text"><?= Html::encode($task->description); ?>
-                </p>
-                <div class="footer-task">
-                    <p class="info-text town-text"><?= Html::encode($task->town->city); ?></p>
-                    <p class="info-text category-text"><?= Html::encode($task->category->name); ?></p>
-                    <a href="#" class="button button--black">Смотреть Задание</a>
-                </div>
-            </div>
-        <?php endforeach; ?>
-<!-- блок пагинации start -->
+        <!-- here ListView widget must be -->
+       <?php  echo ListView::widget([
+                'dataProvider' => $dataProvider,
+                'itemView' => '_new-tasks',
+          ]); ?>
+
+<!-- блок пагинации start
         <div class="pagination-wrapper">
             <ul class="pagination-list">
                 <li class="pagination-item mark">
@@ -46,15 +37,35 @@
                 </li>
             </ul>
         </div>
+         блок пагинации end -->
     </div>
-    <!-- блок пагинации end -->
+
     <!-- блок выбора задач start -->
     <div class="right-column">
        <div class="right-card black">
           <div class="search-form">
-             <form>
+              <?php $form = ActiveForm::begin([
+                  'id' => 'search-task',
+                  'method' => 'get',
+                  'options' => [
+                      'tag' => false,
+                      //'class' => 'search-form',
+                  ]
+              ]); ?>
                 <h4 class="head-card">Категории</h4>
                     <div class="form-group">
+                        <?= Html::activeCheckboxList($taskSearchForm, 'categories', $taskSearchForm->getCategoriesList(), [
+                            'tag' => false,
+                            'unselect' => '',
+                            'item' => function ($index, $label, $name, $checked, $value) {
+                                $checked = $checked ? 'checked' : '';
+                                return
+                                "<input type='checkbox' id='{$index}'>                                
+                                 <label class='control-label' for='{$index}'>{$label}</label>";
+                        }])?>
+                    </div>
+
+<!-- чекбоксы с категориями html start
                         <div>
                             <input type="checkbox" id="сourier-services" checked>
                             <label class="control-label" for="сourier-services">Курьерские услуги</label>
@@ -63,23 +74,38 @@
                             <input id="translations" type="checkbox">
                             <label class="control-label" for="translations">Переводы</label>
                         </div>
-                </div>
+чекбоксы с категориями html end -->
                 <h4 class="head-card">Дополнительно</h4>
                 <div class="form-group">
-                    <input id="without-performer" type="checkbox" checked>
-                     <label class="control-label" for="without-performer">Без исполнителя</label>
+
+                    <?=Html::activeCheckbox($taskSearchForm, 'noResponse', ['class' => 'form-group', 'label' => false])?>
+                    <?=Html::activeLabel($taskSearchForm, 'noResponds')?>
+
+
+                <!-- <input id="without-performer" type="checkbox" checked>
+                    <label class="control-label" for="without-performer">Без исполнителя</label>
+                    -->
                 </div>
+
+                <!-- Выбрать интеревал -->
                 <h4 class="head-card">Период</h4>
                 <div class="form-group">
+                    <?=Html::activeLabel($taskSearchForm, 'period') ?>
+                    <?=Html::activeDropDownList($taskSearchForm, 'period', $taskSearchForm->getPeriodList(),
+                [ 'value' => $get['period']??'', 'encode' => true,]) ?>
+
+                    <!--
                         <label for="period-value"></label>
                         <select id="period-value">
                             <option>1 час</option>
                             <option>12 часов</option>
                             <option>24 часа</option>
                         </select>
+                       -->
                 </div>
-                <input type="button" class="button button--blue" value="Искать">
-            </form>
+                <?=Html::button(Html::encode('Искать'), ['class' => 'button--blue', 'type' => 'submit'])?>
+           <!--  <input type="button" class="button button--blue" value="Искать"> -->
+            <?php $form = ActiveForm::end(); ?>
           </div>
        </div>
     </div>

@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Category;
+use app\models\Review;
 
 /**
- * CategorySeach represents the model behind the search form of `app\models\Category`.
+ * ReviewSearch represents the model behind the search form of `app\models\Review`.
  */
-class CategorySeach extends Category
+class ReviewSearch extends Review
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CategorySeach extends Category
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['name', 'icon'], 'safe'],
+            [['id', 'client_id', 'task_id', 'doer_id', 'stars'], 'integer'],
+            [['review_content', 'create_date'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CategorySeach extends Category
      */
     public function search($params)
     {
-        $query = Category::find();
+        $query = Review::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +59,14 @@ class CategorySeach extends Category
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'client_id' => $this->client_id,
+            'task_id' => $this->task_id,
+            'doer_id' => $this->doer_id,
+            'stars' => $this->stars,
+            'create_date' => $this->create_date,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'icon', $this->icon]);
+        $query->andFilterWhere(['like', 'review_content', $this->review_content]);
 
         return $dataProvider;
     }

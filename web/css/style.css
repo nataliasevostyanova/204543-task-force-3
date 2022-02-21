@@ -416,7 +416,8 @@ template {
   display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
-          justify-content: space-between; }
+          justify-content: space-between;
+  padding-left: 30px; }
 
 .main-content--left {
   -webkit-box-pack: start;
