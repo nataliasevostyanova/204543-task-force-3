@@ -2,17 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\Category;
-use yii\base\Controller;
-//use app\models\Task;
 use Yii;
-//use TaskForce\TaskStatus;
-use app\models\forms\TasksSearchForm;
-use app\models\services\TasksSearchService;
-use yii\data\ActiveDataProvider;
-use Carbon\Carbon;
 
-class TasksController extends \yii\web\Controller
+
+
+use yii\web\Controller;
+use app\models\forms\TasksSearchForm;
+use app\services\TasksSearchService;
+use yii\data\ActiveDataProvider;
+
+
+class TasksController extends Controller
 {
     public function actionIndex()
     {
@@ -24,7 +24,7 @@ class TasksController extends \yii\web\Controller
         }
 
         $taskSearch = new TasksSearchService();
-        $tasks = $taskSearch->searchTask($modelForm);
+        $tasks = $taskSearch->taskSearch();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $tasks,
@@ -43,10 +43,5 @@ class TasksController extends \yii\web\Controller
             'modelForm' => $modelForm,
         ]);
     }
-
-
-    }
-
-
 
 }

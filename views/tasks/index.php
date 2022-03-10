@@ -1,9 +1,8 @@
 <?php
 
-    use yii\helpers\Html;
-    use Carbon\Carbon;
-    use yii\widgets\ActiveForm;
-   use yii\widgets\ListView;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\widgets\ListView;
 
 
 $this->title = 'TaskForce: Новые задания';
@@ -54,14 +53,15 @@ $this->title = 'TaskForce: Новые задания';
               ]); ?>
                 <h4 class="head-card">Категории</h4>
                     <div class="form-group">
-                        <?= Html::activeCheckboxList($taskSearchForm, 'categories', $taskSearchForm->getCategoriesList(), [
+                        <?= Html::activeCheckboxList($modelForm, 'categories', $modelForm->getCategoriesList(), [
                             'tag' => false,
                             'unselect' => '',
                             'item' => function ($index, $label, $name, $checked, $value) {
-                                $checked = $checked ? 'checked' : '';
+                                $checked = $checked ? : '';
                                 return
-                                "<input type='checkbox' id='{$index}'>                                
-                                 <label class='control-label' for='{$index}'>{$label}</label>";
+                                "<input type='checkbox' id=$index value=$value checked='$checked'>                                
+                                 <label class='control-label' for='$index'>$label</label>";
+
                         }])?>
                     </div>
 
@@ -78,8 +78,8 @@ $this->title = 'TaskForce: Новые задания';
                 <h4 class="head-card">Дополнительно</h4>
                 <div class="form-group">
 
-                    <?=Html::activeCheckbox($taskSearchForm, 'noResponse', ['class' => 'form-group', 'label' => false])?>
-                    <?=Html::activeLabel($taskSearchForm, 'noResponds')?>
+                    <?=Html::activeCheckbox($modelForm, 'noResponse', ['class' => 'form-group', 'label' => false])?>
+                    <?=Html::activeLabel($modelForm, 'noResponds')?>
 
 
                 <!-- <input id="without-performer" type="checkbox" checked>
@@ -90,8 +90,8 @@ $this->title = 'TaskForce: Новые задания';
                 <!-- Выбрать интеревал -->
                 <h4 class="head-card">Период</h4>
                 <div class="form-group">
-                    <?=Html::activeLabel($taskSearchForm, 'period') ?>
-                    <?=Html::activeDropDownList($taskSearchForm, 'period', $taskSearchForm->getPeriodList(),
+                    <?=Html::activeLabel($modelForm, 'period') ?>
+                    <?=Html::activeDropDownList($modelForm, 'period', $modelForm->getPeriod(),
                 [ 'value' => $get['period']??'', 'encode' => true,]) ?>
 
                     <!--
