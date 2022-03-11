@@ -3,12 +3,12 @@
 namespace app\models\forms;
 
 use yii\base\Model;
-use app\models\Task;
-use TaskForce\TaskStatus;
 use app\models\Category;
 use yii\helpers\ArrayHelper;
-use yii\data\ActiveDataProvider;
 
+/**
+ * Класс для создания формы поиска/фильтрации заданий по категориям, новизне, времени создания
+ */
 
 class TasksSearchForm extends Model
 {
@@ -62,36 +62,5 @@ class TasksSearchForm extends Model
             'search' => 'Искать',
         ];
     }
-
-    public function getTasksSearch()
-    {
-
-        $tasks = Task::find()
-            ->with([ 'town', 'category'])
-            ->where(['task_status' => TaskStatus::STATUS_NEW])
-            ->orderBy(['created_date' => SORT_DESC])
-            ->all();
-
-       /* if(Carbon::diffInHours($tasks->created_date) <= $period) {
-
-        }*/
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $tasks,
-            'pagination' => [
-                'pageSize' => 3,
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'created_at' => SORT_DESC,
-                ]
-            ],
-        ]);
-
-        return $dataProvider;
-    }
-
-    public function getPeriod
-
 
 }
