@@ -12,11 +12,13 @@ use Carbon\Carbon;
  */
 class TasksSearchService
 {
-    public function taskSearch()
+    public function taskSearch() : array
     {
         $tasks = Task::find()
             ->with('category', 'town')
-            ->where(['task_status' => TaskStatus::STATUS_NEW]);
+            ->where(['task_status' => TaskStatus::STATUS_NEW])
+            ->orderBy(['created_date' => 'SORT_DESC'])
+            ->all();
 
         $modelForm = new TasksSearchForm();
 
@@ -28,17 +30,17 @@ class TasksSearchService
 
             switch ($modelForm->getPeriod()) {
                 case ('1 час'):
-                    return $tasks->andFilterWhere([ '<=', Carbon::diffInHours($tasks->created_date), 1]);
+                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 1]);
 
                 case ('12 часов'):
-                    return $tasks->andFilterWhere([ '<=', Carbon::diffInHours($tasks->created_date), 12]);
+                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 12]);
 
                 case ('24 часа'):
-                    return $tasks->andFilterWhere([ '<=', Carbon::diffInHours($tasks->created_date), 24]);
+                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 24]);
             }
         }
 
-        $tasks->orderBy(['created_date' => 'SORT_DESC']);
+
 
         return $tasks;
     }
