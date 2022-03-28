@@ -14,29 +14,17 @@ use yii\data\ActiveDataProvider;
 
 class TasksController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex() : string
     {
         $modelForm = new TasksSearchForm();
 
         if(Yii::$app->request->get()) {
-
             $modelForm->load(Yii::$app->request->get());
         }
 
-        $taskSearch = new TasksSearchService();
-        $tasks = $taskSearch->taskSearch();
+        $tasksSearch = new TasksSearchService();
+        $dataProvider = $tasksSearch->tasksSearch($modelForm);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $tasks,
-            'pagination' => [
-                'pageSize' => 3,
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'created_date' => SORT_DESC
-                ]
-            ],
-        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

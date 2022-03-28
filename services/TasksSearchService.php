@@ -5,6 +5,7 @@ namespace app\services;
 use app\models\forms\TasksSearchForm;
 use app\models\Task;
 use TaskForce\TaskStatus;
+use yii\data\ActiveDataProvider;
 use Carbon\Carbon;
 
 /**
@@ -12,7 +13,7 @@ use Carbon\Carbon;
  */
 class TasksSearchService
 {
-    public function taskSearch() : array
+    public function tasksSearch(TasksSearchForm $modelForm) : ActiveDataProvider
     {
         $tasks = Task::find()
             ->with('category', 'town')
@@ -20,28 +21,35 @@ class TasksSearchService
             ->orderBy(['created_date' => 'SORT_DESC'])
             ->all();
 
-        $modelForm = new TasksSearchForm();
-
         if($modelForm->categories) {
-            $tasks->andWhere(['category_id' => $modelForm->categories->id]);
+            $tasks->andWhere(['category_id' => $modelForm->categories]);
         }
 
         if($modelForm->getPeriod()) {
 
             switch ($modelForm->getPeriod()) {
-                case ('1 час'):
+                case (TasksSearchForm::PERIOD_1):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 1]);
 
-                case ('12 часов'):
+                case (TasksSearchForm::PERIOD_12):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 12]);
 
-                case ('24 часа'):
+                case (TasksSearchForm::PERIOD_24):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 24]);
-            }
+               }
         }
+        $dataProvider = new ActiveDataProvider([
+            'query' => $tasks,
+            'pagination' => [
+                'pageSize' => 5,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'dt_add' => SORT_DESC
+                ]
+            ],
+        ]);
 
-
-
-        return $tasks;
+        return $dataProvider;
     }
 }
