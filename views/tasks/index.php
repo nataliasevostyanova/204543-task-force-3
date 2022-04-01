@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\ListView;
 
-
 $this->title = 'TaskForce: Новые задания';
 ?>
     <div class="left-column">

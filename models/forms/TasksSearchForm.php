@@ -17,10 +17,10 @@ class TasksSearchForm extends Model
     public $period;
     public $search;
 
-    //нужны ли константы?
     const PERIOD_1 = '1 час';
     const PERIOD_12 = '12 часов';
     const PERIOD_24 = '24 часов';
+    const PERIOD_DEFAULT = 'Не выбран';
 
     public function rules()
     {
@@ -50,6 +50,7 @@ class TasksSearchForm extends Model
             self::PERIOD_1 => '1 час',
             self::PERIOD_12 =>'12 часов',
             self::PERIOD_24 => '24 часа',
+            self::PERIOD_DEFAULT => 'Не выбран',
         ];
     }
 
