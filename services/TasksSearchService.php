@@ -13,43 +13,45 @@ use Carbon\Carbon;
  */
 class TasksSearchService
 {
-    public function tasksSearch(TasksSearchForm $modelForm) : ActiveDataProvider
+    public function tasksSearch(TasksSearchForm $modelForm)
     {
         $tasks = Task::find()
-            ->with('category', 'town')
-            ->where(['task_status' => TaskStatus::STATUS_NEW])
-            ->orderBy(['created_date' => 'SORT_DESC'])
-            ->all();
+            ->with('category', 'town');
+            //->where(['task_status' => TaskStatus::STATUS_NEW]);
 
         if($modelForm->categories) {
             $tasks->andWhere(['category_id' => $modelForm->categories]);
+            //$tasks->andWhere(['in', 'category_id', $modelForm->categories]);
+        }
+
+        if($modelForm->noDoer) {
+            $tasks->andWhere(['task_status' => TaskStatus::STATUS_NEW]);
         }
 
         if($modelForm->getPeriod()) {
 
             switch ($modelForm->getPeriod()) {
+                case (TasksSearchForm::PERIOD_DEFAULT):
+                    return $tasks;
                 case (TasksSearchForm::PERIOD_1):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 1]);
-
                 case (TasksSearchForm::PERIOD_12):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 12]);
-
                 case (TasksSearchForm::PERIOD_24):
                     return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 24]);
-               }
+            }
         }
-        $dataProvider = new ActiveDataProvider([
+        return  new ActiveDataProvider([
             'query' => $tasks,
             'pagination' => [
-                'pageSize' => 5,
+                'pageSize' => 3,
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'dt_add' => SORT_DESC
+                    'created_date' => SORT_DESC
                 ]
             ],
         ]);
 
-        return $dataProvider;
     }
 }

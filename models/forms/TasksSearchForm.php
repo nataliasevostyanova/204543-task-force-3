@@ -35,11 +35,14 @@ class TasksSearchForm extends Model
      */
     public function getCategoriesList() : array
     {
-        $this->categories = Category::find()
-            ->select( 'id','name')
-            ->all();
-        return ArrayHelper::map($this->categories, 'id', 'name');
+         $this->categories = Category::find()
+             ->select(['name'])
+             ->indexBy('id')
+             ->column();
+         //return ArrayHelper::map($this->categories, 'id', 'name');
+        return $this->categories;
     }
+
     /**
      * метод для получения списка интервалов для поиска заданий по времени создания
      * @return array
