@@ -12,20 +12,22 @@ use yii\helpers\ArrayHelper;
 
 class TasksSearchForm extends Model
 {
+    public $categories_id;
     public $categories;
     public $noDoer;
     public $period;
     public $search;
 
+    const PERIOD_DEFAULT = 'Не выбран';
     const PERIOD_1 = '1 час';
     const PERIOD_12 = '12 часов';
     const PERIOD_24 = '24 часов';
-    const PERIOD_DEFAULT = 'Не выбран';
+
 
     public function rules()
     {
         return [
-            [['categories', 'noDoer', 'period', 'search'], 'safe']
+            [['categories_id', 'noDoer', 'period', 'search'], 'safe']
         ];
     }
 
@@ -39,8 +41,8 @@ class TasksSearchForm extends Model
              ->select(['name'])
              ->indexBy('id')
              ->column();
-         //return ArrayHelper::map($this->categories, 'id', 'name');
-        return $this->categories;
+
+         return $this->categories;
     }
 
     /**
@@ -50,17 +52,18 @@ class TasksSearchForm extends Model
     public function getPeriod() : array
     {
         return [
+            self::PERIOD_DEFAULT => 'Не выбран',
             self::PERIOD_1 => '1 час',
             self::PERIOD_12 =>'12 часов',
             self::PERIOD_24 => '24 часа',
-            self::PERIOD_DEFAULT => 'Не выбран',
+
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'categories' => 'КАТЕГОРИИ',
+            'categories_id' => 'КАТЕГОРИИ',
             'period' => 'ПЕРИОД',
             'noDoer' => 'Без исполнителя',
             'search' => 'Искать',

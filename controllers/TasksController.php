@@ -15,22 +15,26 @@ class TasksController extends Controller
 {
 
 
-    public function actionIndex() : string
+    public function actionIndex() /*: string*/
     {
-        $categories = Category::find()->all();
+        $categories = Category::find();
+
         $modelForm = new TasksSearchForm();
 
         if(Yii::$app->request->get()) {
             $modelForm->load(Yii::$app->request->get());
         }
+
         $tasksSearch = new TasksSearchService();
         $dataProvider = $tasksSearch->tasksSearch($modelForm);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'modelForm' => $modelForm,
-            //'categories' => $categories,
+            'categories' => $categories,
+
             ]);
     }
 
 }
+

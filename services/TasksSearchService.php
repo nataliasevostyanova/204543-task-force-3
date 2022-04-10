@@ -4,6 +4,7 @@ namespace app\services;
 
 use app\models\forms\TasksSearchForm;
 use app\models\Task;
+use app\models\Category;
 use TaskForce\TaskStatus;
 use yii\data\ActiveDataProvider;
 use Carbon\Carbon;
@@ -16,16 +17,18 @@ class TasksSearchService
     public function tasksSearch(TasksSearchForm $modelForm)
     {
         $tasks = Task::find()
-            ->with('category', 'town');
-            //->where(['task_status' => TaskStatus::STATUS_NEW]);
+            ->with('category', 'town')
+            ->where(['task_status' => TaskStatus::STATUS_NEW])
+            ->orderBy('created_date DESC');
 
-        if($modelForm->categories) {
-            $tasks->andWhere(['category_id' => $modelForm->categories]);
-            //$tasks->andWhere(['in', 'category_id', $modelForm->categories]);
+        if($modelForm->categories_id) {
+
+            $tasks->andWhere(['category_id' => $modelForm->categories_id,
+                ]);
         }
 
         if($modelForm->noDoer) {
-            $tasks->andWhere(['task_status' => TaskStatus::STATUS_NEW]);
+            $tasks->andWhere(['doer_id' => null]);
         }
 
         if($modelForm->getPeriod()) {
@@ -44,7 +47,7 @@ class TasksSearchService
         return  new ActiveDataProvider([
             'query' => $tasks,
             'pagination' => [
-                'pageSize' => 3,
+                'pageSize' => 5,
             ],
             'sort' => [
                 'defaultOrder' => [
