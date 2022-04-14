@@ -16,6 +16,19 @@ $this->title = 'TaskForce: Новые задания';
        <?php  echo ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemView' => '_new-tasks',
+                'pager' => [
+                    'prevPageLabel' => '',
+                    'nextPageLabel' => '',
+                    'pageCssClass' => 'pagination-item',
+                    'prevPageCssClass' => 'pagination-item mark',
+                    'nextPageCssClass' => 'pagination-item mark',
+                    'activePageCssClass' => 'pagination-item--active',
+                    'options' => ['class' => 'pagination-list'],
+                    'linkOptions' => ['class' => 'link link--page'],
+                    'options' => [
+                        'class' => 'pagination-list',
+                    ],
+           ],
           ]); ?>
 
 <!-- блок пагинации start
@@ -47,6 +60,7 @@ $this->title = 'TaskForce: Новые задания';
           <div class="search-form">
               <?php $form = ActiveForm::begin([
                   'id' => 'search-task',
+                  'action' => '/tasks',
                   'method' => 'get',
                   'options' => [
                       'tag' => false,
@@ -57,20 +71,17 @@ $this->title = 'TaskForce: Новые задания';
 
                     <?= $form->field($modelForm, 'categories_id')->checkboxList($modelForm->getCategoriesList(),
                         [
-                            'separator' => '<br>',
-                            'item' => function ($index, $label, $name, $checked, $value) use ($modelForm) {
-                                settype($modelForm->categories_id, 'array');
-                                $checked = in_array($value, $modelForm->categories_id) ? ' checked' : '';
-                                $input = "<input type=\"checkbox\" name=\"{$name}\" id=\"{$value}\" value=\"{$value}\"{$checked}>";
-                                $label = "<label class=\"control-label\" for=\"{$value}\">{$label}</label>";
-                                return "{$input}{$label}";
-                            }
+                        'separator' => '<br>',
+                        'item' => function ($index, $label, $name, $checked, $value) use ($modelForm) {
+                            settype($modelForm->categories_id, 'array');
+                            $checked = in_array($value, $modelForm->categories_id) ? ' checked' : '';
+                            return
+                                 "<input type=\"checkbox\" name=\"$name\" id=\"$value\" value=\"$value\"$checked>
+                                  <label class=\"control-label\" for=\"$value\">$label</label>";
+                        }
                         ])
                    ?>
-
-
                 </div>
-
 
                 <h4 class="head-card">Дополнительно</h4>
                 <div class="form-group">
@@ -81,11 +92,12 @@ $this->title = 'TaskForce: Новые задания';
                 <!-- Выбрать интеревал -->
                 <h4 class="head-card">Период</h4>
                 <div class="form-group">
-                   <?=Html::activeDropDownList($modelForm, 'period', $modelForm->getPeriod(),
-                        ['value' => $get['period']??'', 'encode' => true,]) ?>
+                   <?= Html::activeDropDownList($modelForm, 'period', $modelForm->getPeriod(),
+                        [ 'id' => 'period-value']) ?>
                 </div>
-                <?=Html::button(Html::encode('Искать'), ['class' => 'button--blue', 'type' => 'submit'])?>
-           <!--  <input type="button" class="button button--blue" value="Искать"> -->
+
+                <?=Html::button(Html::encode('Искать'), [ 'class' => 'button button--blue', 'type' => 'submit'])?>
+
             <?php $form = ActiveForm::end(); ?>
           </div>
        </div>

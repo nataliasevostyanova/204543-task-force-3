@@ -14,6 +14,8 @@ use Carbon\Carbon;
  */
 class TasksSearchService
 {
+    public $dataProvider;
+
     public function tasksSearch(TasksSearchForm $modelForm)
     {
         $tasks = Task::find()
@@ -21,33 +23,31 @@ class TasksSearchService
             ->where(['task_status' => TaskStatus::STATUS_NEW])
             ->orderBy('created_date DESC');
 
-        if($modelForm->categories_id) {
+        if ($modelForm->categories_id) {
 
-            $tasks->andWhere(['category_id' => $modelForm->categories_id,
-                ]);
+            $tasks->andWhere(['category_id' => $modelForm->categories_id]);
         }
 
-        if($modelForm->noDoer) {
+        if ($modelForm->noDoer) {
             $tasks->andWhere(['doer_id' => null]);
         }
 
-        if($modelForm->getPeriod()) {
-
-            switch ($modelForm->getPeriod()) {
-                case (TasksSearchForm::PERIOD_DEFAULT):
-                    return $tasks;
-                case (TasksSearchForm::PERIOD_1):
-                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 1]);
-                case (TasksSearchForm::PERIOD_12):
-                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 12]);
-                case (TasksSearchForm::PERIOD_24):
-                    return $tasks->andFilterWhere([ '<=', (new Carbon)->diffInHours($tasks->created_date), 24]);
+        if ($modelForm->period > 0) {
+           // $carbon = (new Carbon)->now()->sub($modelForm->period->format('Y-m-d H:i:s'));
+            //$tasks->andWhere(['>', 'created_date', $carbon]);
+            switch ($modelForm->period) {
+                case ('1 час'):
+                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHour()->format('Y-m-d H:i:s')]);
+                case ('12 часов'):
+                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHours(12)->format('Y-m-d H:i:s')]);
+                case ('24 часа'):
+                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHours(24)->format('Y-m-d H:i:s')]);
             }
         }
-        return  new ActiveDataProvider([
+        return $dataProvider = new ActiveDataProvider([
             'query' => $tasks,
             'pagination' => [
-                'pageSize' => 5,
+                'pageSize' => 3,
             ],
             'sort' => [
                 'defaultOrder' => [
@@ -55,6 +55,5 @@ class TasksSearchService
                 ]
             ],
         ]);
-
     }
 }

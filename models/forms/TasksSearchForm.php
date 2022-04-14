@@ -18,16 +18,17 @@ class TasksSearchForm extends Model
     public $period;
     public $search;
 
-    const PERIOD_DEFAULT = 'Не выбран';
-    const PERIOD_1 = '1 час';
-    const PERIOD_12 = '12 часов';
-    const PERIOD_24 = '24 часов';
-
+    const PERIODS_VALUES = [
+                '0' =>'Не выбран',
+                '1' => '1 час',
+               '12' => '12 часов',
+               '24' => '24 часа',
+         ];
 
     public function rules()
     {
         return [
-            [['categories_id', 'noDoer', 'period', 'search'], 'safe']
+            [['categories_id', 'categories','noDoer', 'period', 'search'], 'safe']
         ];
     }
 
@@ -52,10 +53,10 @@ class TasksSearchForm extends Model
     public function getPeriod() : array
     {
         return [
-            self::PERIOD_DEFAULT => 'Не выбран',
-            self::PERIOD_1 => '1 час',
-            self::PERIOD_12 =>'12 часов',
-            self::PERIOD_24 => '24 часа',
+                '0' =>'Не выбран',
+                '1' => '1 час',
+               '12' => '12 часов',
+               '24' => '24 часа',
 
         ];
     }
