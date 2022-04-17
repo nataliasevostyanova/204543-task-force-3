@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 07 2022 г., 15:06
+-- Время создания: Апр 17 2022 г., 20:15
 -- Версия сервера: 8.0.24
 -- Версия PHP: 8.0.8
 
@@ -86,7 +86,7 @@ CREATE TABLE `review` (
 
 CREATE TABLE `task` (
   `id` int NOT NULL COMMENT 'id задания',
-  `created_date` datetime NOT NULL COMMENT 'время создания задания',
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'время создания задания',
   `client_id` int NOT NULL COMMENT 'id заказчика',
   `doer_id` int DEFAULT NULL COMMENT 'id  исполнителя',
   `town_id` int NOT NULL COMMENT 'id города',
@@ -105,21 +105,21 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `created_date`, `client_id`, `doer_id`, `town_id`, `latitude`, `longitude`, `title`, `description`, `category_id`, `budget`, `finish_date`, `task_status`) VALUES
-(1, '2021-12-03 17:14:36', 4, NULL, 616, NULL, NULL, 'Rerum et ipsa.', 'Qui tenetur et aspernatur suscipit eveniet maiores. Sed animi veritatis illum. Sint doloribus eos sunt hic. Praesentium deleniti asperiores voluptatem labore aliquid non a porro.', 1, 2127, '2022-05-28 00:00:00', 'new'),
-(2, '2022-01-07 06:28:21', 6, 10, 188, NULL, NULL, 'Dolorem qui at.', 'Velit aut corporis dolorem quo. Minus voluptatem harum voluptate. Provident autem ipsum consectetur consequuntur ut.', 3, 2420, '2022-03-22 00:00:00', 'finished'),
-(3, '2021-12-14 23:10:14', 10, NULL, 182, NULL, NULL, 'Vel ratione.', 'Delectus dicta assumenda maxime esse rerum sit id. Dolor enim laudantium optio vel culpa. Qui ut quis odio sint. Ut aut molestiae natus porro occaecati enim.', 2, 4535, '2022-02-27 00:00:00', 'new'),
-(4, '2022-01-22 01:16:07', 9, NULL, 820, NULL, NULL, 'Fugiat similique ea.', 'Ut officiis dicta eveniet dolore dolorum voluptates. Assumenda deleniti laborum enim sit. Et odit doloremque in ea. Quisquam est ut rerum ut dolorem minus optio officia.', 7, 9860, '2022-02-20 00:00:00', 'new'),
-(5, '2021-12-27 19:51:06', 10, 4, 938, NULL, NULL, 'Sit exercitationem.', 'Natus velit nihil voluptatem deserunt ab. Nulla quis iusto et dolorum id.', 3, 7239, '2022-04-09 00:00:00', 'undo'),
-(6, '2021-12-15 07:35:37', 2, 11, 860, NULL, NULL, 'Perspiciatis in cumque.', 'At molestias qui eos praesentium. Nihil ut rerum aperiam tempora. Nisi impedit commodi nemo qui ullam est.', 5, 8498, '2022-05-30 00:00:00', 'working'),
-(7, '2022-01-09 02:16:51', 14, 7, 351, NULL, NULL, 'Architecto libero voluptatem.', 'Et qui officia fugit excepturi. Voluptates rerum quo est excepturi aspernatur est. Molestiae sequi quos dolores eius reprehenderit omnis. Quia maiores pariatur et quis.', 1, 6116, '2022-02-27 00:00:00', 'finished'),
-(8, '2022-01-04 17:33:26', 6, 15, 441, NULL, NULL, 'Perferendis qui.', 'Placeat sit porro consequatur sunt. Dolor quae quo voluptas qui maxime qui totam. Aut dolores numquam doloremque sit. Quaerat eos consectetur et aut et est.', 6, 1933, '2022-05-28 00:00:00', 'working'),
-(9, '2022-01-17 08:30:41', 3, 8, 95, NULL, NULL, 'Non quos.', 'Facere qui nam accusamus nam. Id quo amet praesentium dignissimos omnis minus repudiandae debitis. Quia praesentium optio eaque voluptatem qui doloremque. Quis facere ab libero dolorem.', 6, 7847, '2022-05-30 00:00:00', 'failed'),
-(10, '2021-12-31 07:38:39', 7, 14, 345, NULL, NULL, 'Est eaque rerum.', 'Sit sit a eum reiciendis. Eos et exercitationem quidem a sapiente distinctio assumenda. Sunt molestiae alias est doloribus. Soluta cupiditate recusandae sint voluptatem a est.', 3, 3225, '2022-03-19 00:00:00', 'working'),
-(11, '2021-11-08 14:11:48', 14, 8, 230, NULL, NULL, 'Porro itaque.', 'Voluptas maxime quam aperiam voluptatibus veniam incidunt. Hic quisquam rem maxime cumque aliquam ad. Aperiam qui omnis quis provident. Rerum dolor non et possimus enim.', 3, 4497, '2022-02-19 00:00:00', 'working'),
-(12, '2022-01-04 04:16:42', 3, NULL, 41, NULL, NULL, 'Dolorem natus.', 'Nulla nulla aut aspernatur unde odit optio. Ut et ut atque asperiores. Minima quo qui aut ad numquam molestiae iusto nisi.', 3, 9079, '2022-04-24 00:00:00', 'new'),
-(13, '2021-12-15 17:35:59', 13, 13, 829, NULL, NULL, 'Voluptatem et.', 'Et corporis magnam reiciendis qui vero nihil. Distinctio numquam qui et quidem. Sed labore nihil enim. Veritatis porro totam et laudantium.', 1, 7136, '2022-04-14 00:00:00', 'finished'),
-(14, '2021-12-13 14:21:10', 12, NULL, 628, NULL, NULL, 'Molestiae ipsam ut.', 'Ut enim qui esse hic accusantium. Debitis est quibusdam quae qui deleniti. Ut hic soluta delectus nobis a quae inventore assumenda.', 2, 8931, '2022-04-10 00:00:01', 'new'),
-(15, '2022-01-08 22:54:01', 3, 4, 249, NULL, NULL, 'Quam et et.', 'Voluptatem est nobis omnis a harum aliquid eos voluptatum. Vero quis expedita repellendus quo iste dolorem. Voluptatem hic hic dolores. Consequatur impedit enim eius vel quidem sed.', 1, 2126, '2022-05-07 00:00:00', 'working');
+(1, '2022-04-17 16:59:46', 4, NULL, 616, NULL, NULL, 'Rerum et ipsa.', 'Qui tenetur et aspernatur suscipit eveniet maiores. Sed animi veritatis illum. Sint doloribus eos sunt hic. Praesentium deleniti asperiores voluptatem labore aliquid non a porro.', 1, 2127, '2022-05-28 00:00:00', 'new'),
+(2, '2022-04-17 17:19:21', 6, NULL, 188, NULL, NULL, 'Dolorem qui at.', 'Velit aut corporis dolorem quo. Minus voluptatem harum voluptate. Provident autem ipsum consectetur consequuntur ut.', 3, 2420, '2022-03-22 00:00:00', 'finished'),
+(3, '2021-12-14 20:10:14', 10, 15, 182, NULL, NULL, 'Vel ratione.', 'Delectus dicta assumenda maxime esse rerum sit id. Dolor enim laudantium optio vel culpa. Qui ut quis odio sint. Ut aut molestiae natus porro occaecati enim.', 2, 4535, '2022-02-27 00:00:00', 'new'),
+(4, '2022-04-17 16:16:07', 9, NULL, 820, NULL, NULL, 'Fugiat similique ea.', 'Ut officiis dicta eveniet dolore dolorum voluptates. Assumenda deleniti laborum enim sit. Et odit doloremque in ea. Quisquam est ut rerum ut dolorem minus optio officia.', 7, 9860, '2022-02-20 00:00:00', 'new'),
+(5, '2021-12-27 16:51:06', 10, 4, 938, NULL, NULL, 'Sit exercitationem.', 'Natus velit nihil voluptatem deserunt ab. Nulla quis iusto et dolorum id.', 3, 7239, '2022-04-09 00:00:00', 'undo'),
+(6, '2021-12-15 04:35:37', 2, 11, 860, NULL, NULL, 'Perspiciatis in cumque.', 'At molestias qui eos praesentium. Nihil ut rerum aperiam tempora. Nisi impedit commodi nemo qui ullam est.', 5, 8498, '2022-05-30 00:00:00', 'working'),
+(7, '2022-01-08 23:16:51', 14, 7, 351, NULL, NULL, 'Architecto libero voluptatem.', 'Et qui officia fugit excepturi. Voluptates rerum quo est excepturi aspernatur est. Molestiae sequi quos dolores eius reprehenderit omnis. Quia maiores pariatur et quis.', 1, 6116, '2022-02-27 00:00:00', 'finished'),
+(8, '2022-01-04 14:33:26', 6, 15, 441, NULL, NULL, 'Perferendis qui.', 'Placeat sit porro consequatur sunt. Dolor quae quo voluptas qui maxime qui totam. Aut dolores numquam doloremque sit. Quaerat eos consectetur et aut et est.', 6, 1933, '2022-05-28 00:00:00', 'working'),
+(9, '2022-01-17 05:30:41', 3, 8, 95, NULL, NULL, 'Non quos.', 'Facere qui nam accusamus nam. Id quo amet praesentium dignissimos omnis minus repudiandae debitis. Quia praesentium optio eaque voluptatem qui doloremque. Quis facere ab libero dolorem.', 6, 7847, '2022-05-30 00:00:00', 'failed'),
+(10, '2021-12-31 04:38:39', 7, 14, 345, NULL, NULL, 'Est eaque rerum.', 'Sit sit a eum reiciendis. Eos et exercitationem quidem a sapiente distinctio assumenda. Sunt molestiae alias est doloribus. Soluta cupiditate recusandae sint voluptatem a est.', 3, 3225, '2022-03-19 00:00:00', 'working'),
+(11, '2021-11-08 11:11:48', 14, 8, 230, NULL, NULL, 'Porro itaque.', 'Voluptas maxime quam aperiam voluptatibus veniam incidunt. Hic quisquam rem maxime cumque aliquam ad. Aperiam qui omnis quis provident. Rerum dolor non et possimus enim.', 3, 4497, '2022-02-19 00:00:00', 'working'),
+(12, '2022-01-04 01:16:42', 3, 12, 41, NULL, NULL, 'Dolorem natus.', 'Nulla nulla aut aspernatur unde odit optio. Ut et ut atque asperiores. Minima quo qui aut ad numquam molestiae iusto nisi.', 3, 9079, '2022-04-24 00:00:00', 'new'),
+(13, '2021-12-15 14:35:59', 13, 13, 829, NULL, NULL, 'Voluptatem et.', 'Et corporis magnam reiciendis qui vero nihil. Distinctio numquam qui et quidem. Sed labore nihil enim. Veritatis porro totam et laudantium.', 1, 7136, '2022-04-14 00:00:00', 'finished'),
+(14, '2022-04-17 15:05:10', 12, NULL, 628, NULL, NULL, 'Molestiae ipsam ut.', 'Ut enim qui esse hic accusantium. Debitis est quibusdam quae qui deleniti. Ut hic soluta delectus nobis a quae inventore assumenda.', 2, 8931, '2022-04-10 00:00:01', 'new'),
+(15, '2022-01-08 19:54:01', 3, 4, 249, NULL, NULL, 'Quam et et.', 'Voluptatem est nobis omnis a harum aliquid eos voluptatum. Vero quis expedita repellendus quo iste dolorem. Voluptatem hic hic dolores. Consequatur impedit enim eius vel quidem sed.', 1, 2126, '2022-05-07 00:00:00', 'working');
 
 -- --------------------------------------------------------
 
@@ -2389,7 +2389,7 @@ INSERT INTO `user` (`id`, `full_name`, `sign_date`, `role`, `phone`, `email`, `t
 (3, 'Ульяна Яковлеваа', '2021-02-09 00:00:00', '0', '+252794919722', 'krykov.klementina@hotmail.com', '@pariatur', 'F`6MiGQNg_gx', 'https://via.placeholder.com/640x480.png/009944?text=earum', 'Казалось, как будто несколько знакомым. Пока он его рассматривал, белокурый успел уже нащупать дверь и отворить ее. Это был среднего роста, очень недурно сложенный молодец с полными румяными щеками.', '2002-11-03', 992),
 (4, 'Давыдова Диана ', '2021-07-09 00:00:00', '0', '+256132135136', 'osipov.ykov@savelev.net', '@sapiente', 'DKA:Mi~', 'https://via.placeholder.com/640x480.png/00aa00?text=rerum', 'Ведь я продаю не лапти. — Однако ж согласитесь сами: ведь это все народ мертвый. Мертвым телом хоть забор подпирай, — говорит пословица. — Да, именно, — сказал Чичиков, ожидая не без приятности.', '1983-06-21', 165),
 (5, 'Георгий  Рябов', '2021-05-03 00:00:00', '0', '+637759978618', 'yna.bobrov@aksenov.org', '@rerum', '1Z8.;NK:_3xEGrNwnPD', 'https://via.placeholder.com/640x480.png/006622?text=doloribus', 'Вслед за тем мешку с разным лакейским туалетом. В этой же конюшне видели козла, которого, по словам его, были самой субдительной сюперфлю, — слово, обидное для мужчины, происхоит от Фиты — — и не.', '1995-09-24', 877),
-(6, 'Горбачёв Платон ', '2021-06-19 00:00:00', '', '+35734902073', 'knikonov@hotmail.com', '@utgorby', '}lWHHFJ+u@K[q^U}', 'https://via.placeholder.com/640x480.png/00dd00?text=rem', 'Меня только то и другое, а все, однако ж, обратимся к действующим лицам. Чичиков, как уж мы видели, решился вовсе не сварилось. Видно, что повар руководствовался более каким-то вдохновеньем и клал.', '2000-01-20', 379),
+(6, 'Горбачёв Платон ', '2021-06-19 00:00:00', '1', '+35734902073', 'knikonov@hotmail.com', '@utgorby', '}lWHHFJ+u@K[q^U}', 'https://via.placeholder.com/640x480.png/00dd00?text=rem', 'Меня только то и другое, а все, однако ж, обратимся к действующим лицам. Чичиков, как уж мы видели, решился вовсе не сварилось. Видно, что повар руководствовался более каким-то вдохновеньем и клал.', '2000-01-20', 379),
 (7, 'Елизавета Жданова', '2021-10-11 00:00:00', '0', '+50953121169', 'fedorov.kuzma@mail.ru', '@est', '\'_O>(@~O$Mv:7', 'https://via.placeholder.com/640x480.png/00ff00?text=fugit', 'Вот все, что ни есть ненужного, что Акулька у нас на театрах гости, входящие в последнем акте на сцену. Игроки были изображены с прицелившимися киями, несколько вывороченными назад руками и ногами.', '1980-07-03', 746),
 (8, 'Валерий  Фомичёв', '2021-07-03 00:00:00', '0', '+8862455391484', 'sava75@aleksandrov.ru', '@eum', ')<h1^*IBXy0Dz5/', 'https://via.placeholder.com/640x480.png/00aa00?text=numquam', 'Но, однако ж, так устремит взгляд, как будто подступал под неприступную крепость. — — Прощайте, миленькие малютки! — сказал Собакевич, не выпуская его руки и держал его крепко. — Порфирий, Павлушка!.', '1992-02-13', 323),
 (9, 'Игорь Воробьёва', '2021-04-27 00:00:00', '1', '+22283893188', 'fanisimova@terenteva.net', '@sequi', '3qe`Px\"KQee>T}sL5#p4', 'https://via.placeholder.com/640x480.png/0011dd?text=numquam', 'Это будет тебе дорога в Маниловку; а — который год? — Старшему осьмой, а меньшему вчера только минуло шесть, — сказала старуха — А, если хорошо, это другое дело: я против этого ничего, — сказал.', '1993-05-11', 237),

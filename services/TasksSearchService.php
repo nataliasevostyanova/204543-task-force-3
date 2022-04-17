@@ -32,24 +32,24 @@ class TasksSearchService
             $tasks->andWhere(['doer_id' => null]);
         }
 
-        if ($modelForm->period > 0) {
-           // $carbon = (new Carbon)->now()->sub($modelForm->period->format('Y-m-d H:i:s'));
-            //$tasks->andWhere(['>', 'created_date', $carbon]);
-            switch ($modelForm->period) {
+        if ($modelForm->period) {
+
+           switch ($modelForm->period) {
                 case ('1 час'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHour()->format('Y-m-d H:i:s')]);
+                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHour())]);
                     break;
                 case ('12 часов'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHours(12)->format('Y-m-d H:i:s')]);
+                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHours(12))]);
                     break;
                 case ('24 часа'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', (new Carbon)->now()->subHours(24)->format('Y-m-d H:i:s')]);
+                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHours(24))]);
             }
         }
+
         return $dataProvider = new ActiveDataProvider([
             'query' => $tasks,
             'pagination' => [
-                'pageSize' => 3,
+                'pageSize' => 5,
             ],
             'sort' => [
                 'defaultOrder' => [

@@ -17,7 +17,7 @@ class TasksController extends Controller
 {
 
 
-    public function actionIndex() /*: string*/
+    public function actionIndex() : string
     {
        $modelForm = new TasksSearchForm();
 
@@ -28,15 +28,13 @@ class TasksController extends Controller
         $tasksSearch = new TasksSearchService();
         $dataProvider = $tasksSearch->tasksSearch($modelForm);
 
-        "<pre>";
+       /* "<pre>";
         var_dump($modelForm->period);
         "</pre>";
-       /* "<pre>";
-        var_dump($dataProvider->getModels()->created_date);
-        "</pre>";*/
+
         "<pre>";
-        var_dump((new Carbon)->now()->subHours(12)->format('Y-m-d H:i:s'));
-        "</pre>";
+        var_dump(strtotime((new Carbon)->now()->subHours(12)));
+        "</pre>";*/
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
