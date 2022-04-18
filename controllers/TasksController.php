@@ -28,14 +28,6 @@ class TasksController extends Controller
         $tasksSearch = new TasksSearchService();
         $dataProvider = $tasksSearch->tasksSearch($modelForm);
 
-       /* "<pre>";
-        var_dump($modelForm->period);
-        "</pre>";
-
-        "<pre>";
-        var_dump(strtotime((new Carbon)->now()->subHours(12)));
-        "</pre>";*/
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'modelForm' => $modelForm,

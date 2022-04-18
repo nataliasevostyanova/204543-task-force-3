@@ -35,14 +35,14 @@ class TasksSearchService
         if ($modelForm->period) {
 
            switch ($modelForm->period) {
-                case ('1 час'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHour())]);
-                    break;
-                case ('12 часов'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHours(12))]);
-                    break;
-                case ('24 часа'):
-                    $tasks->andFilterWhere(['>', 'task.created_date', strtotime((new Carbon)->now()->subHours(24))]);
+              case 1:
+                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHour()]);
+                break;
+              case 12:
+                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHours(12)]);
+                break;
+              case 24:
+                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHours(24)]);
             }
         }
 

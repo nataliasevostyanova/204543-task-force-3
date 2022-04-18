@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 17 2022 г., 20:15
+-- Время создания: Апр 18 2022 г., 18:09
 -- Версия сервера: 8.0.24
 -- Версия PHP: 8.0.8
 
@@ -105,10 +105,10 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `created_date`, `client_id`, `doer_id`, `town_id`, `latitude`, `longitude`, `title`, `description`, `category_id`, `budget`, `finish_date`, `task_status`) VALUES
-(1, '2022-04-17 16:59:46', 4, NULL, 616, NULL, NULL, 'Rerum et ipsa.', 'Qui tenetur et aspernatur suscipit eveniet maiores. Sed animi veritatis illum. Sint doloribus eos sunt hic. Praesentium deleniti asperiores voluptatem labore aliquid non a porro.', 1, 2127, '2022-05-28 00:00:00', 'new'),
-(2, '2022-04-17 17:19:21', 6, NULL, 188, NULL, NULL, 'Dolorem qui at.', 'Velit aut corporis dolorem quo. Minus voluptatem harum voluptate. Provident autem ipsum consectetur consequuntur ut.', 3, 2420, '2022-03-22 00:00:00', 'finished'),
+(1, '2022-04-18 12:59:46', 4, NULL, 616, NULL, NULL, 'Rerum et ipsa.', 'Qui tenetur et aspernatur suscipit eveniet maiores. Sed animi veritatis illum. Sint doloribus eos sunt hic. Praesentium deleniti asperiores voluptatem labore aliquid non a porro.', 1, 2127, '2022-05-28 00:00:00', 'new'),
+(2, '2022-04-18 14:15:21', 6, NULL, 188, NULL, NULL, 'Dolorem qui at.', 'Velit aut corporis dolorem quo. Minus voluptatem harum voluptate. Provident autem ipsum consectetur consequuntur ut.', 3, 2420, '2022-03-22 00:00:00', 'finished'),
 (3, '2021-12-14 20:10:14', 10, 15, 182, NULL, NULL, 'Vel ratione.', 'Delectus dicta assumenda maxime esse rerum sit id. Dolor enim laudantium optio vel culpa. Qui ut quis odio sint. Ut aut molestiae natus porro occaecati enim.', 2, 4535, '2022-02-27 00:00:00', 'new'),
-(4, '2022-04-17 16:16:07', 9, NULL, 820, NULL, NULL, 'Fugiat similique ea.', 'Ut officiis dicta eveniet dolore dolorum voluptates. Assumenda deleniti laborum enim sit. Et odit doloremque in ea. Quisquam est ut rerum ut dolorem minus optio officia.', 7, 9860, '2022-02-20 00:00:00', 'new'),
+(4, '2022-04-18 14:16:00', 9, NULL, 820, NULL, NULL, 'Fugiat similique ea.', 'Ut officiis dicta eveniet dolore dolorum voluptates. Assumenda deleniti laborum enim sit. Et odit doloremque in ea. Quisquam est ut rerum ut dolorem minus optio officia.', 7, 9860, '2022-02-20 00:00:00', 'new'),
 (5, '2021-12-27 16:51:06', 10, 4, 938, NULL, NULL, 'Sit exercitationem.', 'Natus velit nihil voluptatem deserunt ab. Nulla quis iusto et dolorum id.', 3, 7239, '2022-04-09 00:00:00', 'undo'),
 (6, '2021-12-15 04:35:37', 2, 11, 860, NULL, NULL, 'Perspiciatis in cumque.', 'At molestias qui eos praesentium. Nihil ut rerum aperiam tempora. Nisi impedit commodi nemo qui ullam est.', 5, 8498, '2022-05-30 00:00:00', 'working'),
 (7, '2022-01-08 23:16:51', 14, 7, 351, NULL, NULL, 'Architecto libero voluptatem.', 'Et qui officia fugit excepturi. Voluptates rerum quo est excepturi aspernatur est. Molestiae sequi quos dolores eius reprehenderit omnis. Quia maiores pariatur et quis.', 1, 6116, '2022-02-27 00:00:00', 'finished'),
@@ -118,7 +118,7 @@ INSERT INTO `task` (`id`, `created_date`, `client_id`, `doer_id`, `town_id`, `la
 (11, '2021-11-08 11:11:48', 14, 8, 230, NULL, NULL, 'Porro itaque.', 'Voluptas maxime quam aperiam voluptatibus veniam incidunt. Hic quisquam rem maxime cumque aliquam ad. Aperiam qui omnis quis provident. Rerum dolor non et possimus enim.', 3, 4497, '2022-02-19 00:00:00', 'working'),
 (12, '2022-01-04 01:16:42', 3, 12, 41, NULL, NULL, 'Dolorem natus.', 'Nulla nulla aut aspernatur unde odit optio. Ut et ut atque asperiores. Minima quo qui aut ad numquam molestiae iusto nisi.', 3, 9079, '2022-04-24 00:00:00', 'new'),
 (13, '2021-12-15 14:35:59', 13, 13, 829, NULL, NULL, 'Voluptatem et.', 'Et corporis magnam reiciendis qui vero nihil. Distinctio numquam qui et quidem. Sed labore nihil enim. Veritatis porro totam et laudantium.', 1, 7136, '2022-04-14 00:00:00', 'finished'),
-(14, '2022-04-17 15:05:10', 12, NULL, 628, NULL, NULL, 'Molestiae ipsam ut.', 'Ut enim qui esse hic accusantium. Debitis est quibusdam quae qui deleniti. Ut hic soluta delectus nobis a quae inventore assumenda.', 2, 8931, '2022-04-10 00:00:01', 'new'),
+(14, '2022-04-17 20:05:10', 12, NULL, 628, NULL, NULL, 'Molestiae ipsam ut.', 'Ut enim qui esse hic accusantium. Debitis est quibusdam quae qui deleniti. Ut hic soluta delectus nobis a quae inventore assumenda.', 2, 8931, '2022-04-10 00:00:01', 'new'),
 (15, '2022-01-08 19:54:01', 3, 4, 249, NULL, NULL, 'Quam et et.', 'Voluptatem est nobis omnis a harum aliquid eos voluptatum. Vero quis expedita repellendus quo iste dolorem. Voluptatem hic hic dolores. Consequatur impedit enim eius vel quidem sed.', 1, 2126, '2022-05-07 00:00:00', 'working');
 
 -- --------------------------------------------------------

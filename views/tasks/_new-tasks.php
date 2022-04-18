@@ -10,7 +10,7 @@ use Carbon\Carbon;
                 <p class="price price--task"><?= Html::encode($model->budget); ?> &#8381</p>
             </div>
             <p class="info-text"><span class="current-time"><?= Carbon::parse($model->created_date)->locale('ru')
-                        ->diffForHumans() ?></span><span> 'created_date:'. <?= $model->created_date?></span></p>
+                        ->diffForHumans() ?></span></p>
             <p class="task-text"><?= Html::encode($model->description); ?>
             </p>
             <div class="footer-task">

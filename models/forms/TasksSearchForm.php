@@ -19,10 +19,10 @@ class TasksSearchForm extends Model
     public $search;
 
     const PERIODS_VALUES = [
-                '0' =>'Не выбран',
-                '1' => '1 час',
-               '12' => '12 часов',
-               '24' => '24 часа',
+                0 =>'Не выбран',
+                1 => '1 час',
+               12 => '12 часов',
+               24 => '24 часа',
          ];
 
     public function rules()
@@ -52,13 +52,7 @@ class TasksSearchForm extends Model
      */
     public function getPeriod() : array
     {
-        return [
-                '0' =>'Не выбран',
-                '1' => '1 час',
-               '12' => '12 часов',
-               '24' => '24 часа',
-
-        ];
+        return self::PERIODS_VALUES;
     }
 
     public function attributeLabels()
