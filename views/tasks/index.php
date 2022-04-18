@@ -25,11 +25,8 @@ $this->title = 'TaskForce: Новые задания';
                     'activePageCssClass' => 'pagination-item--active',
                     'options' => ['class' => 'pagination-list'],
                     'linkOptions' => ['class' => 'link link--page'],
-                    'options' => [
-                        'class' => 'pagination-list',
-                    ],
-           ],
-          ]); ?>
+                ],
+             ]); ?>
 
 <!-- блок пагинации start
         <div class="pagination-wrapper">
