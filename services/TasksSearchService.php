@@ -32,9 +32,9 @@ class TasksSearchService
             $tasks->andWhere(['doer_id' => null]);
         }
 
-        if ($modelForm->period) {
+        if ($modelForm->period>0) {
 
-          switch ($modelForm->period>0) {
+          switch ($modelForm->period) {
               case 1:
                 $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHour()]);
                 break;
