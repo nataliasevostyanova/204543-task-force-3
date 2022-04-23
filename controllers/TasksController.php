@@ -2,21 +2,37 @@
 
 namespace app\controllers;
 
-use yii\base\Controller;
-use app\models\Task;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
+use app\models\forms\TasksSearchForm;
+use app\services\TasksSearchService;
+use app\models\Category;
 use Carbon\Carbon;
+use app\models\Task;
 
-class TasksController extends \yii\web\Controller
+
+
+class TasksController extends Controller
 {
-    public function actionIndex()
-    {
-        $tasks = Task::find()
-            ->with([ 'town', 'category'])
-            ->where(['task_status' => 'new'])
-            ->orderBy(['created_date' => SORT_DESC])
-            ->all();
 
-        return $this->render('index', ['tasks' => $tasks]);
+
+    public function actionIndex() : string
+    {
+       $modelForm = new TasksSearchForm();
+
+        if (Yii::$app->request->get()) {
+            $modelForm->load(Yii::$app->request->get());
+        }
+
+        $tasksSearch = new TasksSearchService();
+        $dataProvider = $tasksSearch->tasksSearch($modelForm);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'modelForm' => $modelForm,
+            ]);
     }
 
 }
+

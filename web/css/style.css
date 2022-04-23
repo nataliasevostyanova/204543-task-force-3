@@ -416,7 +416,8 @@ template {
   display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
-          justify-content: space-between; }
+          justify-content: space-between;
+  padding-left: 30px; }
 
 .main-content--left {
   -webkit-box-pack: start;
@@ -882,8 +883,8 @@ template {
   right: -145px; }
 
 .right-card {
-  width: 240px;
-  padding: 25px 30px;
+  width: 260px;
+  padding: 25px 20px;
   padding-top: 20px;
   border-radius: 15px;
   margin-top: 40px; }
@@ -896,7 +897,7 @@ template {
 .black {
   background-color: #23242c;
   color: #ffffff;
-  font-size: 16px; }
+  font-size: 14px; }
 
 .white {
   color: #23242c;

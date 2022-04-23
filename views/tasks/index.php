@@ -1,32 +1,34 @@
 <?php
 
-    use yii\helpers\Html;
-    use Carbon\Carbon;
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\widgets\ListView;
+use yii\helpers\ArrayHelper;
+use app\models\Category;
+use app\models\forms\TasksSearchForm;
 
-    $this->title = 'TaskForce: Новые задания';
+$this->title = 'TaskForce: Новые задания';
 ?>
-
     <div class="left-column">
         <h3 class="head-main head-task">Новые задания</h3>
 
-        <?php foreach($tasks as $task): ?>
-            <div class="task-card">
-                <div class="header-task">
-                    <a  href="#" class="link link--block link--big"><?= Html::encode($task->title); ?></a>
-                    <p class="price price--task"><?= Html::encode($task->budget); ?></p>
-                </div>
-                <p class="info-text"><span class="current-time"><?= Carbon::parse($task->created_date)->locale('ru')
-                            ->diffForHumans(); ?></span></p>
-                <p class="task-text"><?= Html::encode($task->description); ?>
-                </p>
-                <div class="footer-task">
-                    <p class="info-text town-text"><?= Html::encode($task->town->city); ?></p>
-                    <p class="info-text category-text"><?= Html::encode($task->category->name); ?></p>
-                    <a href="#" class="button button--black">Смотреть Задание</a>
-                </div>
-            </div>
-        <?php endforeach; ?>
-<!-- блок пагинации start -->
+       <!-- here ListView widget must be -->
+       <?php  echo ListView::widget([
+                'dataProvider' => $dataProvider,
+                'itemView' => '_new-tasks',
+                'pager' => [
+                    'prevPageLabel' => '',
+                    'nextPageLabel' => '',
+                    'pageCssClass' => 'pagination-item',
+                    'prevPageCssClass' => 'pagination-item mark',
+                    'nextPageCssClass' => 'pagination-item mark',
+                    'activePageCssClass' => 'pagination-item--active',
+                    'options' => ['class' => 'pagination-list'],
+                    'linkOptions' => ['class' => 'link link--page'],
+                ],
+             ]); ?>
+
+<!-- блок пагинации start
         <div class="pagination-wrapper">
             <ul class="pagination-list">
                 <li class="pagination-item mark">
@@ -46,41 +48,55 @@
                 </li>
             </ul>
         </div>
+         блок пагинации end -->
     </div>
-    <!-- блок пагинации end -->
+
     <!-- блок выбора задач start -->
     <div class="right-column">
        <div class="right-card black">
-           <div class="search-form">
-                <form>
-                    <h4 class="head-card">Категории</h4>
-                    <div class="form-group">
-                        <div>
-                            <input type="checkbox" id="сourier-services" checked>
-                            <label class="control-label" for="сourier-services">Курьерские услуги</label>
-                            <input id="cargo-transportation" type="checkbox">
-                            <label class="control-label" for="cargo-transportation">Грузоперевозки</label>
-                            <input id="translations" type="checkbox">
-                            <label class="control-label" for="translations">Переводы</label>
-                        </div>
-                    </div>
-                    <h4 class="head-card">Дополнительно</h4>
-                    <div class="form-group">
-                        <input id="without-performer" type="checkbox" checked>
-                        <label class="control-label" for="without-performer">Без исполнителя</label>
-                    </div>
-                    <h4 class="head-card">Период</h4>
-                    <div class="form-group">
-                        <label for="period-value"></label>
-                        <select id="period-value">
-                            <option>1 час</option>
-                            <option>12 часов</option>
-                            <option>24 часа</option>
-                        </select>
-                    </div>
-                    <input type="button" class="button button--blue" value="Искать">
-                </form>
-           </div>
+          <div class="search-form">
+              <?php $form = ActiveForm::begin([
+                  'id' => 'search-task',
+                  'action' => '/tasks',
+                  'method' => 'get',
+                  'options' => [
+                      'tag' => false,
+                  ]
+              ]); ?>
+                <h4 class="head-card">Категории</h4>
+                <div class="form-group">
+
+                    <?= $form->field($modelForm, 'categories_id')->checkboxList($modelForm->getCategoriesList(),
+                        [
+                        'separator' => '<br>',
+                        'item' => function ($index, $label, $name, $checked, $value) use ($modelForm) {
+                            settype($modelForm->categories_id, 'array');
+                            $checked = in_array($value, $modelForm->categories_id) ? ' checked' : '';
+                            return
+                                 "<input type=\"checkbox\" name=\"$name\" id=\"$value\" value=\"$value\"$checked>
+                                  <label class=\"control-label\" for=\"$value\">$label</label>";
+                        }
+                        ])
+                   ?>
+                </div>
+
+                <h4 class="head-card">Дополнительно</h4>
+                <div class="form-group">
+                    <?=Html::activeCheckbox($modelForm, 'noDoer',  [ 'checked' => false, 'class' => 'form-group', 'label' => false])?>
+                    <?=Html::activeLabel($modelForm, 'noDoer')?>
+                </div>
+
+                <!-- Выбрать интеревал -->
+                <h4 class="head-card">Период</h4>
+                <div class="form-group">
+                   <?= Html::activeDropDownList($modelForm, 'period', $modelForm->getPeriod(),
+                        [ 'id' => 'period-value']) ?>
+                </div>
+
+                <?=Html::button(Html::encode('Искать'), [ 'class' => 'button button--blue', 'type' => 'submit'])?>
+
+            <?php $form = ActiveForm::end(); ?>
+          </div>
        </div>
     </div>
     <!-- блок выбора задач end -->
