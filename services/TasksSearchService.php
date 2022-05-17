@@ -33,17 +33,7 @@ class TasksSearchService
         }
 
         if ($modelForm->period>0) {
-
-          switch ($modelForm->period) {
-              case 1:
-                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHour()]);
-                break;
-              case 12:
-                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHours(12)]);
-                break;
-              case 24:
-                $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHours(24)]);
-            }
+          $tasks->andWhere(['>', 'created_date', (new Carbon)->now()->subHours($modelForm->period)]);
         }
 
         return $dataProvider = new ActiveDataProvider([
